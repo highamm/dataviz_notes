@@ -1,0 +1,115 @@
+---
+title: "Section 2: Motivation and Grammar of Graphics"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+## install.packages("palmerpenguins")
+library(palmerpenguins)
+library(tidyverse)
+penguins
+
+## single quantitative frequency plot
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly() 
+## single categorical barplot
+ggplot(data = penguins, aes(x = species)) +
+  geom_bar()
+## two quant scatterplot
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth()
+## two cat heatmap
+ggplot(data = penguins, aes(x = species, y = island)) +
+  geom_bin_2d()
+```
+
+## Review Exercises
+
+```{r}
+## 1
+ggplot(data = penguins, aes(x = species, y = bill_length_mm)) +
+  geom_violin()
+
+## 2
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly(aes(colour = species)) 
+
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly(colour = "darkorange3") 
+
+## 3
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm,
+                            colour = species)) +
+  geom_point() +
+  geom_smooth()
+
+## 4
+
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm)) +
+  geom_point(aes(colour = species)) +
+  geom_smooth()
+
+```
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_histogram(colour = "black", fill = "white") +
+  facet_wrap(~ species, ncol = 1)
+
+penguins <- penguins %>% mutate(random_var = sample(c("A", "B", "C", "D", "E", "F", "G"),
+       size = nrow(penguins),
+       replace = TRUE))
+ggplot(data =penguins, aes(x = bill_length_mm, y = bill_depth_mm, colour = random_var)) +
+  geom_point() 
+
+ggplot(data =penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~random_var)
+
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~ species)
+ggplot(data = penguins, aes(x = species)) +
+  geom_bar(stat = "count") ## don't need stat = "count" because it's the default.
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "stack") + ## don't need "stacked" because it's default
+  scale_fill_viridis_d()
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "dodge") + ## don't need "stacked" because it's default
+  scale_fill_viridis_d()
+ggplot(data = penguins, aes(x = species)) +
+  geom_bar() +
+  coord_polar()
+ggplot(data = penguins, aes(x = species)) + 
+  geom_bar() +
+  coord_flip()
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm,
+                            colour = species)) +
+  geom_point() +
+  geom_smooth()
+```
+
+## Section 2.3
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm,
+                            colour = species)) +
+  geom_point() +
+  geom_smooth() +
+  theme(plot.background = element_rect(fill = "yellow"),
+        axis.ticks.length=unit(1.1, "cm"),
+        panel.grid = element_line(colour = "brown", size = 1.5),
+        aspect.ratio = 5,
+        legend.position = c(0, 0),
+        legend.direction = "horizontal",
+        legend.key = element_rect(fill = "darkorange3", colour = "blue")) +
+  scale_colour_manual(values = c("yellow", "green", "purple"))
+```
