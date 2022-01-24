@@ -1,0 +1,135 @@
+FilmName	OscarYear	Duration	Rating	DirectorName	DirectorGender	OscarWinner	GenreName	Genre_Drama	Genre_Bio	CountryName	ForeignandUSA	ProductionName	ProductionCompany	BudgetRevised	Budget	DomesticBoxOffice	WorldwideRevised	WorldwideBoxOffice	DomesticPercent	LimitedOpeningWnd	LimitedTheaters	LimitedAveragePThtr	WideOpeningWkd	WideTheaters	WideTheaterAverage	WidestTheaters	Days	Rotten	Metacritic	IMDb	CriticAverage	MPrinicpalCast	FPrincipalCast	FPercentPrincipalCast	MLeadTime	FLeadTime	GuestMLeadTIme	GuestFLEadTime	MLeadPercentinFilm	FLeadPercentinFilm	GMLeadPerinFilm	GFLeadPerinFilm	M/FDifference	F/MRatio	M/FPercentMore	FHighLow	LeadTime	MorF	MaleLAA	FemaleLAA
+Crash	2006	113	4	Haggis	0	1	Drama	1	0	"USA, Germany"	1	Lionsgate Films	4	6.5	6500000	54580300	98.41	98410061	0.555	NA	NA	NA	9107071	1864	4886	1905	315	75	69	7.9	74.33	1	1	0.5	14.51	9.04	NA	NA	0.128	0.08	*	*	0.048	0.625	0.377	0	14.51	0	1	1
+Brokeback Mountain	2006	134	4	Lee	0	0	"Drama, Romance"	1	0	"USA, Canada"	1	Focus Features	2	14	14000000	83025853	178.06	178062759	0.466	"547,425"	5	"109,485"	5805082	683	8499	2089	133	87	87	7.7	83.67	2	1	0.33	73.16	12.47	NA	NA	0.546	0.093	*	*	0.453	0.1703	0.83	0	73.16	0	0	0
+Capote	2006	114	4	Miller	0	0	"Drama, Biography, Crime"	1	1	"USA, Canada"	1	Sony Pictures Classics	9	7	7000000	28747570	49.23	49233161	0.584	"324,857"	12	"27,071"	2291075	1239	1849	1239	210	90	88	7.4	84	1	1	0.5	67.17	15.22	NA	NA	0.589	0.134	*	*	0.455	0.2275	0.773	0	67.17	0	0	0
+"Good Night, and Good Luck"	2006	93	2	Clooney	0	0	Drama	1	0	"USA, UK, France, Japan"	1	Warner Independent Pictures	16	7.5	7500000	31501218	54.64	54641191	0.577	"421,446"	11	"38,313"	3066046	657	4667	929	161	93	80	7.5	82.67	2	1	0.33	39.34	7.57	NA	NA	0.423	0.081	*	*	0.342	0.1915	0.808	0	39.34	0	0	0
+Munich	2006	164	4	Spielberg	0	0	"Drama, History, Thriller"	1	0	"USA, Canada, France"	1	Universal Pictures	13	70	70000000	47379090	130.36	130358911	0.363	"4,152,260"	532	"7,805"	7566075	1485	5095	1498	98	78	74	7.6	76	2	1	0.33	91.32	7.33	NA	NA	0.557	0.045	*	*	0.512	0.0808	0.92	0	91.32	0	0	0
+The Departed	2007	151	4	Scorsese	0	1	"Drama, Crime, Thriller"	1	0	"USA, Hong Kong"	1	Warner Brothers Pictures	15	90	90000000	132373442	289.85	289847354	0.457	NA	NA	NA	26887467	3017	8912	3017	168	91	86	8.5	87.33	3	0	0	53.47	17.15	NA	NA	0.354	0.114	*	*	0.24	0.322	0.679	0	53.47	0	0	0
+Babel	2007	143	4	Inarritu	0	0	Drama	1	0	"USA, France, Mexico"	1	Paramount Vantage	7	25	25000000	34300771	135.33	135330182	0.253	"389,351"	7	"55,622"	5558095	1251	4443	1251	154	69	69	7.5	71	1	1	0.5	18.29	25.49	NA	NA	0.128	0.178	*	*	-0.05	1.3906	-0.394	1	18.29	0	0	0
+Letters from Iwo Jima	2007	141	4	Eastwood	0	0	"Drama, History, War"	1	0	USA	0	Warner Brothers Pictures	15	19	19000000	13753931	68.67	68673228	0.2	"89,097"	5	"17,819"	1696356	720	2356	781	128	91	89	7.9	86.33	1	0	0	39.57	3.25	NA	NA	0.281	0.023	*	*	0.258	0.0819	0.918	0	39.57	0	0	0
+Little Miss Sunshine	2007	110	4	Dayton AND Faris	1	0	"Drama, Biography"	1	1	USA	0	Fox Searchlight Pictures	3	8	8000000	59889948	100.52	100523181	0.596	"370,782"	7	"52,969"	5610845	691	8120	1602	247	91	80	7.9	83.33	2	1	0.33	42.4	30.54	NA	NA	0.385	0.278	*	*	0.107	0.7221	0.28	1	42.4	0	0	0
+The Queen	2007	103	3	Frears	0	0	"Drama, Biography"	1	1	"USA, UK, France, Italy"	1	Miramax Films	5	14.792	14791630	56425113	123.38	123384128	0.457	"122,014"	3	"40,671"	2201664	606	3633	1850	230	97	91	7.4	87.33	1	1	0.5	24.32	42.39	NA	44.48	0.236	0.412	*	0.431844	-0.176	1.7458	-0.743	1	24.32	0	0	0
+No Country for Old Men	2008	122	4	Coen AND Coen	0	1	"Drama, Crime, Thriller"	1	0	USA	0	Miramax Films	5	25	25000000	74273505	171.63	171627166	0.433	"1,226,333"	28	"43,798"	7776773	860	9043	2037	154	93	91	8.1	88.33	3	0	0	34.39	6.54	NA	NA	0.282	0.054	*	*	0.228	0.1915	0.81	0	34.39	0	0	0
+Atonement	2008	123	4	Wright	0	0	"Drama, Mystery, Romance"	1	0	"USA, UK, France"	1	Focus Features	2	30	30000000	50921738	129.27	129266061	0.394	"784,145"	32	"24,505"	4221866	950	4444	1400	126	83	85	7.8	82	1	2	0.67	40.4	26.11	NA	NA	0.328	0.212	*	*	0.116	0.6463	0.354	1	40.4	0	0	0
+Juno	2008	96	3	Reitman	0	0	"Drama, Comedy, Romance"	1	0	USA	0	Fox Searchlight Pictures	3	7.5	7500000	143492840	231.41	231411584	0.62	"413,869"	7	"59,124"	10634576	1019	10436	2534	198	94	81	7.5	83.33	1	2	0.67	16.53	63.19	NA	NA	0.172	0.658	*	*	-0.486	3.8256	-2.823	1	16.53	0	0	0
+Michael Clayton	2008	119	4	Gilroy	0	0	"Drama, Crime, Mystery"	1	0	USA	0	Warner Brothers Pictures	15	25	25000000	49024969	92.99	92991835	0.527	"719,910"	15	"47,994"	10373422	2511	4131	2585	168	90	82	7.3	81.67	2	1	0.33	65.52	14.41	NA	NA	0.551	0.121	*	*	0.43	0.2196	0.78	0	65.52	0	0	0
+There Will Be Blood	2008	158	4	Anderson	0	0	Drama	1	0	USA	0	Paramount Vantage	7	25	25000000	40218903	76.18	76181545	0.528	"190,739"	2	"95,370"	4869383	885	5502	1620	128	91	92	8.1	88	2	0	0	106.07	4.44	NA	NA	0.671	0.028	*	*	0.643	0.0417	0.958	0	106.07	0	0	0
+Slumdog Millionaire	2009	120	4	Boyle AND Tandan	1	1	"Drama, Romance"	1	0	"USA, UK"	1	Fox Searchlight Pictures	3	15	15000000	141319195	377.91	377910544	0.374	"360,018"	10	"36,002"	4301870	614	7006	2943	198	92	86	8	86	1	1	0.5	38.19	10.12	NA	10.16	0.318	0.084	*	0.08467	0.234	0.2642	0.735	0	38.19	0	0	0
+The Curious Case of Benjamin Button	2009	166	3	Fincher 	0	0	"Drama, Fantasy, Romance"	1	0	USA	0	Paramount Pictures	6	150	150000000	127490802	333.93	333932083	0.382	NA	NA	NA	26853816	2988	8987	2988	120	72	70	7.8	73.33	1	1	0.5	73.14	42.28	NA	NA	0.441	0.255	*	*	0.186	0.5782	0.422	1	73.14	0	0	0
+Frost/Nixon	2009	122	4	Howard	0	0	"Drama, History"	1	0	"USA, UK, France"	1	Universal Pictures	13	35	35000000	18593156	27.43	27426335	0.678	"180,708"	3	"60,236"	3022250	1099	2750	1105	112	92	80	7.7	83	3	0	0	55.48	10.12	NA	NA	0.455	0.083	*	*	0.372	0.1824	0.818	0	55.48	0	0	0
+Milk	2009	128	4	Van Sant	0	0	"Drama, Biography, History"	1	1	USA	0	Focus Features	2	20	20000000	31838002	54.59	54586584	0.583	"1,453,844"	36	"40,385"	1481155	882	1679	882	142	94	84	7.6	84.67	3	0	0	75.49	6.39	NA	6.35	0.59	0.05	*	0.0496	0.54	0.0847	0.915	0	75.49	0	0	0
+The Reader	2009	124	4	Daldry	0	0	"Drama, Romance"	1	0	"USA, Germany"	1	The Weinstein Company	17	32	32000000	34180954	108.9	108901967	0.314	"168,051"	8	"21,006"	2380376	1002	2376	1203	156	61	58	7.6	65	2	1	0.33	49.15	37.25	NA	NA	0.396	0.3	*	*	0.096	0.7576	0.242	1	49.15	0	0	0
+The Hurt Locker	2010	131	4	Bigelow	1	1	"Drama, History, Thriller"	1	0	USA	0	Summit Entertainment	10	15	15000000	17017811	49.23	49230772	0.346	NA	NA	NA	145352	4	36338	535	*	98	94	7.6	89.33	3	0	0	61.42	0.37	NA	NA	0.469	0.003	*	*	0.466	0.0064	0.994	0	61.42	0	0	0
+Avatar	2010	162	3	Cameron	0	0	"Action, Adventure, Fantasy"	0	0	"USA, UK"	1	Twentieth Century Fox	12	237	237000000	760505847	2787.97	2787965087	0.273	NA	NA	NA	77025481	3452	22313	3461	238	83	83	7.9	81.67	1	2	0.67	85.16	37.33	NA	NA	0.526	0.23	*	*	0.296	0.4373	0.562	1	85.16	0	0	1
+The Blind Side	2010	129	3	Lee Hancock	0	0	"Drama, Biography, Sport"	1	1	USA	0	Warner Brothers Pictures	15	29	29000000	255950375	309.21	309208309	0.828	NA	NA	NA	34119372	3110	10971	3407	196	66	53	7.7	65.33	2	1	0.33	48.36	43.31	NA	41.53	0.375	0.336	*	0.321	0.039	0.896	0.104	1	48.36	0	1	0
+District 9	2010	112	4	Blomkamp	0	0	"Action, Science Fiction"	0	0	"USA, Canada, New Zealand, South Africa"	1	Tristar Pictures	11	30	30000000	115646235	210.82	210819611	0.549	NA	NA	NA	37354308	3049	12251	3180	84	90	81	8	83.67	2	0	0	48.28	2.38	NA	NA	0.431	0.021	*	*	0.41	0.0487	0.951	0	48.28	0	0	0
+An Education	2010	100	3	Scherfig	1	0	Drama	1	0	"USA, UK"	1	Sony Pictures Classics	9	6.794	6794257	12574715	26.1	26096852	0.482	"159,017"	4	"39,754"	763234	761	1003	763	210	94	85	7.3	84	2	1	0.33	34.54	66.46	NA	NA	0.345	0.665	*	*	-0.32	1.9275	-0.924	1	34.54	0	0	0
+Inglourious Basterds	2010	153	4	Tarantino	0	0	"Drama, Adventure, War"	1	0	"USA, Germany"	1	The Weinstein Company	17	75	75000000	120523073	321.46	321455689	0.375	NA	NA	NA	38054676	3165	12024	3358	119	89	69	8.3	80.33	2	1	0.33	35.17	21.43	NA	NA	0.23	0.14	*	*	0.09	0.6087	0.391	0	35.17	0	0	0
+Precious	2010	110	4	Daniels 	0	0	Drama	1	0	USA	0	Lionsgate Films	4	10	10000000	47536959	63.65	63647833	0.747	"1,872,458"	18	"104,025"	10881772	629	17300	1003	133	91	79	7.4	81.33	0	3	1	2.04	58.35	NA	NA	0.019	0.53	*	*	-0.511	27.8947	-27.603	1	2.04	0	1	1
+A Serious Man	2010	106	4	Coen AND Coen	0	0	"Drama, Comedy"	1	0	"USA, UK, France"	1	Focus Features	2	7	7000000	9228768	31.43	31430334	0.294	NA	NA	NA	251337	6	41890	262	98	89	79	7	79.33	2	1	0.33	51.1	4.54	NA	NA	0.482	0.043	*	*	0.439	0.0892	0.911	0	51.1	0	0	0
+Up	2010	136	2	Docter AND Peterson	0	0	"Animation, Adventure, Comedy"	0	0	USA	0	Walt Disney Pictures	14	175	175000000	293004164	731.34	731342744	0.401	NA	NA	NA	68108790	3766	18085	3886	161	98	88	8.3	89.67	3	1	0.25	45.47	2.52	NA	NA	0.334	0.019	*	*	0.315	0.0569	0.945	0	45.47	0	0	0
+Up in the Air	2010	109	4	Reitman	0	0	"Drama, Romance"	1	0	USA	0	Paramount Pictures	6	25	25000000	83813460	166.84	166842739	0.502	"1,181,450"	15	"78,763"	11270248	1895	5947	2218	126	91	83	7.5	83	1	2	0.67	68.09	27.38	66.47	NA	0.625	0.251	0.60982	*	0.374	0.4016	0.598	1	68.09	0	0	0
+The King's Speech	2011	118	4	Hooper	0	1	"Drama, Biography"	1	1	"USA, UK, Australia"	1	The Weinstein Company	17	15	15000000	138795342	414.21	414211549	0.335	"355,450"	4	"88,863"	4484352	700	6406	2584	126	94	88	8.1	87.67	2	1	0.33	72.37	21.32	NA	NA	0.613	0.181	*	*	0.432	0.2953	0.705	1	72.37	0	0	0
+127 Hours	2011	94	4	Boyle	0	0	"Drama, Adventure, Biography"	1	1	"USA, UK"	1	Fox Searchlight Pictures	3	18	18000000	18329466	60.74	60738797	0.302	"264,851"	4	"66,213"	2136801	916	2333	916	161	93	82	7.6	83.67	1	2	0.67	71.49	4.36	NA	NA	0.761	0.046	*	*	0.715	0.0604	0.939	0	71.49	0	0	0
+Black Swan	2011	108	4	Aronofsky	0	0	"Drama, Thriller"	1	0	USA	0	Fox Searchlight Pictures	3	13	13000000	106952327	329.4	329398046	0.325	"1,443,809"	18	"80,212"	8383479	959	8742	2407	154	87	79	8	82	1	3	0.75	15.57	83.42	16.24	NA	0.144	0.772	0.15037	*	-0.628	5.3611	-4.358	1	15.57	0	0	0
+The Fighter	2011	116	4	Russell	0	0	"Drama, Biography, Sport"	1	1	USA	0	Paramount Pictures	6	25	25000000	93571803	129.19	129190869	0.724	"300,010"	4	"75,003"	12135468	2503	4848	2534	112	90	79	7.9	82.67	2	1	0.33	57.32	22.16	NA	NA	0.494	0.191		*	0.303	0.3866	0.613	1	57.32	0	0	0
+Inception	2011	148	3	Nolan	0	0	"Action, Mystery, Science Fiction"	0	0	"USA, UK"	1	Warner Brothers Pictures	15	160	160000000	292568851	825.53	825532764	0.354	NA	NA	NA	62785337	3792	16557	3792	175	86	74	8.8	82.67	3	1	0.25	59.5	24.02	NA	NA	0.402	0.162		*	0.24	0.403	0.596	1	59.5	0	0	0
+The Kids Are All Right	2011	106	4	Cholodenko	1	0	"Drama, Comedy"	1	0	USA	0	Focus Features	2	3.5	3500000	20803237	34.71	34705850	0.599	"491,971"	7	"70,282"	3525585	847	4162	994	105	93	86	7.1	83.33	1	2	0.67	34.23	42.56	NA	NA	0.323	0.402		*	-0.079	1.2446	-0.243	1	34.23	0	0	0
+The Social Network	2011	120	3	Fincher 	0	0	"Drama, Biography"	1	1	USA	0	Colombia Pictures	1	40	40000000	96917897	224.92	224920315	0.431	NA	NA	NA	22445653	2771	8100	2921	154	96	95	7.8	89.67	3	0	0	53.33	5.23	NA	NA	0.444	0.044		*	0.4	0.0991	0.902	0	53.33	0	0	0
+Toy Story 3	2011	103	1	Unkrich	0	0	"Animation, Adventure, Comedy"	0	0	USA	0	Walt Disney Studios	14	200	200000000	414984497	1063.17	1063171911	0.39	NA	NA	NA	110307189	4028	27385	4028	168	99	92	8.4	91.67	2	0	0	33.21	19.41	NA	NA	0.322	0.188		*	0.134	0.5839	0.416	1	33.21	0	0	0
+True Grit	2011	110	3	Coen AND Coen	0	0	"Drama, Adventure, Western"	1	0	USA	0	Paramount Pictures	6	38	38000000	171031347	252.28	252276927	0.678	NA	NA	NA	24850000	3047	8156	3464	*	96	80	7.7	84.33	2	1	0.33	34.08	48.57	NA	NA	0.31	0.442		*	-0.132	1.4258	-0.425	1	34.08	0	0	0
+Winter's Bone	2011	100	4	Granik 	1	0	Drama	1	0	USA	0	Roadside Attractions	8	2	2000000	6531491	13.83	13831503	0.472	NA	NA	NA	84887	4	21222	141	315	94	90	7.2	85.33	2	1	0.33	13.35	59.04	NA	NA	0.134	0.59		*	-0.456	4.403	-3.422	1	13.35	0	0	0
+The Artist	2012	100	3	Hazanavicius	0	1	"Drama, Comedy, Romance"	1	0	France	1	The Weinstein Company	17	15	15000000	44667095	133.43	133432856	0.335	"204,878"	4	"51,220"	2371803	662	3583	1756	210	97	89	8	88.67	9	6	0.4	55.14	27.46	NA	26.48	0.551	0.275		0.2648	0.276	0.4991	0.502	1	55.14	0	0	0
+The Descendants	2012	115	4	Payne	0	0	"Drama, Comedy"	1	0	USA	0	Fox Searchlight Pictures	3	20	20000000	82624961	177.24	177243185	0.466	"1,190,096"	29	"41,038"	4380138	876	5000	2038	156	89	84	7.3	82	12	3	0.2	73.41	30.16	NA	NA	0.638	0.262		*	0.376	0.4107	0.589	1	73.41	0	0	0
+Extremely Loud and Incredibly Close	2012	129	3	Daldry	0	0	"Drama, Adventure, Mystery"	1	0	USA	0	Warner Brothers Pictures	15	*	*	31836745	55.25	55247881	0.576	"72,348"	6	"12,058"	10045332	2360	4256	2360	96	46	46	6.9	53.67	8	7	0.47	82.29	18.33	NA	NA	0.638	0.142		*	0.496	0.2226	0.777	1	82.29	0	0	0
+The Help	2012	137	3	Taylor	0	0	Drama	1	0	"USA, India, United Arab Emigrates"	1	Walt Disney Studios	14	25	25000000	169705587	216.64	216639112	0.783	NA	NA	NA	26044590	2534	10278	3014	212	76	62	8.1	73	0	3	1	4.44	46.3	NA	NA	0.032	0.338		*	-0.306	10.5625	-9.428	1	4.44	0	0	0
+Hugo	2012	126	2	Scorsese	0	0	"Drama, Adventure, Family"	1	0	USA	0	Paramount Pictures	6	170	170000000	73820094	185.77	185770160	0.397	NA	NA	NA	11364505	1277	8899	2608	142	94	83	7.6	84.33	10	5	0.33	58.06	27.52	NA	NA	0.461	0.218		*	0.243	0.4729	0.526	1	58.06	0	0	0
+Midnight in Paris	2012	94	3	Allen	0	0	"Comedy, Fantasy, Romance"	0	0	"USA, Spain, France"	1	Sony Pictures Classics	9	17	17000000	56816662	151.12	151119219	0.376	"599,003"	6	"99,834"	5830723	944	6177	1038	308	93	81	7.7	83.67	7	8	0.53	61.26	21.42	NA	NA	0.652	0.228		*	0.424	0.3497	0.65	1	61.26	0	0	0
+Moneyball	2012	133	3	Miller	0	0	"Drama, Biography, Sport"	1	1	USA	0	Colombia Pictures	1	50	50000000	75605492	110.21	110206216	0.686	NA	NA	NA	19501302	2993	6516	3018	133	94	87	7.6	85.67	2	1	0.33	71.32	3.55	NA	NA	0.536	0.027		*	0.509	0.0504	0.95	0	71.32	0	0	0
+The Tree of Life	2012	139	3	Malick	0	0	"Drama, Fantasy"	1	0	USA	0	Fox Searchlight Pictures	3	32	32000000	13303319	54.3	54303319	0.245	NA	NA	NA	372920	4	93230	237	154	84	85	6.7	78.67	2	1	0.33	37.25	25.18	NA	NA	0.268	0.181		*	0.087	0.6754	0.324	1	37.25	0	0	0
+War Horse	2012	146	3	Spielberg	0	0	"Drama, War"	1	0	"USA, UK"	1	Walt Disney Studios	14	66	66000000	79883359	177.58	177584879	0.45	"7,512,000"	"2,376"	"3,162"	14527972	2376	6114	2856	131	77	72	7.2	73.67	13	2	0.13	34.01	12.41	NA	NA	0.233	0.085		*	0.148	0.3648	0.635	0	34.01	0	0	0
+Argo	2013	120	4	Affleck	0	1	"Drama, History, Thriller"	1	0	USA	0	Warner Brothers Pictures	15	44.5	44500000	136019448	232.33	232325503	0.585	NA	NA	NA	19458109	3232	6020	3247	*	96	86	7.8	86.67	11	4	0.27	36.43	5.29	NA	NA	0.304	0.044		*	0.26	0.1447	0.855	0	36.43	0	0	0
+Amour	2013	127	3	Haneke	0	0	"Drama, Romance"	1	0	"France, Germany, Austria"	1	Sony Pictures Classics	9	8.9	8900000	6739492	19.84	19839492	0.34	NA	NA	NA	68266	3	22755	333	149	93	94	7.9	88.67	1	2	0.67	92.48	60.02	NA	NA	0.728	0.473		*	0.255	0.6497	0.351	1	92.48	0	0	0
+Beasts of the Southern Wild	2013	91	3	Zeitlin	0	0	"Drama, Fantasy"	1	0	USA	0	Fox Searchlight Pictures	3	1.8	1800000	12784397	21.11	21107746	0.606	NA	NA	NA	169702	4	42426	318	268	86	86	7.3	81.67	4	4	0.5	26.32	47.05	NA	NA	0.289	0.517		*	-0.228	1.7889	-0.788	1	26.32	0	1	1
+Django Unchained	2013	165	4	Tarantino	0	0	Western	0	0	USA	0	The Weinstein Company	17	100	100000000	162804648	425.37	425368238	0.383	NA	NA	NA	30122888	3010	10008	3012	143	88	81	8.5	84.67	5	1	0.17	76.53	15.24	NA	NA	0.464	0.092		*	0.372	0.1983	0.801	0	76.53	0	1	1
+Les Miserables	2013	158	3	Hooper	0	0	"Drama, Musical, Romance"	1	0	"USA, UK"	1	Universal Pictures	13	61	61000000	148775460	441.81	441809770	0.337	NA	NA	NA	27281735	2814	9695	2297	101	70	63	7.6	69.67	4	3	0.43	48.36	16.57	NA	NA	0.306	0.105		*	0.201	0.3431	0.657	0	48.36	0	0	0
+Life of Pi	2013	127	2	Lee	0	0	"Drama, Adventure, Fantasy"	1	0	"USA, UK, Taiwan"	1	Twentieth Century Fox	12	120	120000000	124976634	609.02	609016565	0.205	NA	NA	NA	22451514	2946	7621	2946	247	87	79	8	82	6	1	0.14	64.57	3.52	NA	NA	0.508	0.028		*	0.48	0.0551	0.945	0	64.57	0	0	0
+Lincoln	2013	149	3	Spielberg	0	0	"Drama, Biography, History"	1	1	"USA, India"	1	Walt Disney Studios	14	65	65000000	182204440	275.29	275293450	0.662	944308	11	"85,846"	21049406	1775	11859	2293	168	90	88	7.4	84	1	0	0	70.12	13.35	NA	NA	0.471	0.09		*	0.381	0.1911	0.81	0	70.12	0	0	0
+Silver Linings Playbook	2013	122	4	Russell	0	0	"Drama, Comedy, Romance"	1	0	USA	0	The Weinstein Company	17	21	21000000	132088910	236.41	236412453	0.559	443003	16	"27,688"	4079314	745	5476	2809	203	92	81	7.8	83.67	3	3	0.5	68.56	46.38	NA	48.3	0.562	0.38		0.3959	0.182	0.6762	0.324	1	68.56	0	0	0
+Zero Dark Thirty	2013	157	4	Bigelow	1	0	"Drama, History, Thriller"	1	0	USA	0	Colombia Pictures	1	40	40000000	95720716	132.82	132820716	0.721	"417,150"	5	"83,430"	24438936	2937	8321	2946	103	93	95	7.4	87.33	5	2	0.29	22.23	48.12	NA	NA	0.142	0.306			-0.164	2.1549	-1.165	1	22.23	0	0	0
+12 Years a Slave	2014	134	4	McQueen	0	1	"Drama, Biography, History"	1	1	"USA, UK"	1	Fox Searchlight Pictures	3	20	20000000	56667870	187.73	187733202	0.302	"923,715"	19	"48,617"	6675731	1144	5835	1474	203	96	97	8.1	91.33	8	2	0.2	87.24	8.14	NA	NA	0.651	0.061			0.59	0.0937	0.907	0	87.24	0	1	1
+American Hustle	2014	138	4	Russell	0	0	"Drama, Crime"	1	0	USA	0	Colombia Pictures	1	40	40000000	150117807	251.17	251171807	0.598	740455	6	"123,409"	19106933	2507	7621	2629	115	93	90	7.3	85.33	6	2	0.25	58.29	45.5	NA	NA	0.422	0.33			0.092	0.782	0.219	1	58.29	0	0	0
+Captain Phillips	2014	134	3	Greengrass	0	0	"Drama, Biography, Thriller"	1	1	USA	0	Colombia Pictures	1	55	55000000	107100855	218.79	218791811	0.49	NA	NA	NA	25718314	3020	8516	3143	143	93	83	7.9	85	3	1	0.25	48.5	1.25	NA	NA	0.362	0.009			0.353	0.0249	0.974	0	48.5	0	1	0
+Dallas Buyers Club	2014	117	4	Vallee	0	0	"Drama, Biography"	1	1	USA	0	Warner Brothers Pictures	15	5	5000000	27296514	55.2	55198285	0.495	260865	9	"28,985"	2687157	666	4035	1110	182	94	84	8	86	2	1	0.33	83.23	23.53	NA	NA	0.711	0.201			0.51	0.2827	0.717	1	83.23	0	0	0
+Gravity	2014	91	3	Cuaron	0	0	"Science Fiction, Thriller"	0	0	"USA, UK"	1	Warner Brothers Pictures	15	100	100000000	274084951	723.19	723192705	0.379	NA	NA	NA	55785112	3575	15604	3820	217	97	96	7.9	90.67	1	1	0.5	20.48	61.45	NA	NA	0.225	0.675			-0.45	3	-2	1	20.48	0	0	0
+Her	2014	126	4	Jonze	0	0	"Drama, Romance, Science Fiction"	1	0	USA	0	Warner Brothers Pictures	15	23	23000000	25556065	47.35	47351251	0.54	"260,382"	6	"43,397"	5383775	1729	3114	1729	121	94	90	8	88	2	5	0.71	105.23	12.2	NA	NA	0.835	0.097			0.738	0.1162	0.884	0	105.23	0	0	0
+Nebraska	2014	115	4	Payne	0	0	"Drama, Comedy, Adventure"	1	0	USA	0	Paramount Pictures	6	12	12000000	17613460	19.18	19184912	0.918	"140,401"	4	"35,100"	1552426	968	1604	968	126	91	86	7.8	85	4	1	0.2	71.37	17.4	NA	NA	0.621	0.151			0.47	0.2432	0.756	1	71.37	0	0	0
+Philomena	2014	98	3	Frears	0	0	"Drama, Biography"	1	1	"USA, UK, France"	1	Twentieth Century Fox	12	12	12000000	37707719	100.13	100129872	0.377	"128,435"	4	"32,109"	3676001	835	4402	1225	182	92	76	7.6	81.33	1	1	0.5	48.06	44.13	NA	NA	0.49	0.45			0.04	0.9184	0.082	1	48.06	0	0	0
+The Wolf of Wall Street	2014	180	4	Scorcese	0	0	"Biography, Comedy, Crime"	0	1	USA	0	Paramount Pictures	6	100	100000000	116866727	392	392000694	0.298	NA	NA	NA	18361578	2537	7238	2557	100	77	75	8.2	78	10	2	0.17	117.55	22.38	NA	NA	0.653	0.124			0.529	0.1899	0.81	0	117.55	0	0	0
+																																															9.04	1		
+																																															12.47	1		
+																																															15.22	1		
+																																															7.57	1		
+																																															7.33	1		
+																																															17.15	1		
+																																															25.49	1		
+																																															3.25	1		
+																																															30.54	1		
+																																															42.39	1		
+																																															6.54	1		
+																																															26.11	1		
+																																															63.19	1		
+																																															14.41	1		
+																																															4.44	1		
+																																															10.12	1		
+																																															42.28	1		
+																																															10.12	1		
+																																															6.39	1		
+																																															37.25	1		
+																																															0.37	1		
+																																															37.33	1		
+																																															43.31	1		
+																																															2.38	1		
+																																															66.46	1		
+																																															21.43	1		
+																																															58.35	1		
+																																															4.54	1		
+																																															2.52	1		
+																																															27.38	1		
+																																															21.32	1		
+																																															4.36	1		
+																																															83.42	1		
+																																															22.16	1		
+																																															24.02	1		
+																																															42.56	1		
+																																															5.23	1		
+																																															19.41	1		
+																																															48.57	1		
+																																															59.04	1		
+																																															27.46	1		
+																																															30.16	1		
+																																															18.33	1		
+																																															46.3	1		
+																																															27.52	1		
+																																															21.42	1		
+																																															3.55	1		
+																																															25.18	1		
+																																															12.41	1		
+																																															5.29	1		
+																																															60.02	1		
+																																															47.05	1		
+																																															15.24	1		
+																																															16.57	1		
+																																															3.52	1		
+																																															13.35	1		
+																																															46.38	1		
+																																															48.12	1		
+																																															8.14	1		
+																																															45.5	1		
+																																															1.25	1		
+																																															23.53	1		
+																																															61.45	1		
+																																															12.2	1		
+																																															17.4	1		
+																																															44.13	1		
+																																															22.38	1		

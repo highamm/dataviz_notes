@@ -77,14 +77,37 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
   geom_point() +
   geom_smooth() +
   facet_wrap(~ species)
+```
+
+```{r}
+
 ggplot(data = penguins, aes(x = species)) +
   geom_bar(stat = "count") ## don't need stat = "count" because it's the default.
+
+penguins_count <- penguins %>% group_by(species) %>%
+  summarise(ncount = n())
+
+ggplot(data = penguins_count, aes(x = species)) +
+  geom_bar(stat = "count")
+
+
+
 ggplot(data = penguins, aes(x = species, fill = sex)) +
   geom_bar(position = "stack") + ## don't need "stacked" because it's default
   scale_fill_viridis_d()
-ggplot(data = penguins, aes(x = species, fill = sex)) +
+
+penguins_nomiss <-penguins %>% filter(!is.na(sex))
+
+ggplot(data = penguins_nomiss, aes(x = species, fill = sex)) +
   geom_bar(position = "dodge") + ## don't need "stacked" because it's default
   scale_fill_viridis_d()
+
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm)) +
+  geom_point(stat = "identity", position = "identity") +
+  facet_null() +
+  coord_cartesian()
+
 ggplot(data = penguins, aes(x = species)) +
   geom_bar() +
   coord_polar()
@@ -95,6 +118,22 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm,
                             colour = species)) +
   geom_point() +
   geom_smooth()
+```
+
+```{r}
+library(tidyverse)
+category <- rep(c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5"), 7)
+time <- rep(c(2000, 2001, 2002, 2003, 2004, 2005, 2006), each = 5) 
+response <- rpois(length(category), 30)
+df <- tibble(category, time, response)
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_col(aes(fill = category)) +
+  labs(y = "count") +
+  scale_fill_viridis_d()
+
+ggplot(data = df, aes(x = time, y = response)) +
+  geom_line(aes(colour = category)) +
+  scale_colour_viridis_d()
 ```
 
 ## Section 2.3
@@ -113,3 +152,32 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm,
         legend.key = element_rect(fill = "darkorange3", colour = "blue")) +
   scale_colour_manual(values = c("yellow", "green", "purple"))
 ```
+
+
+
+
+
+
+Exercise 1 Questions
+
+Do different rules apply for animated/interactive graphs in a web app?
+
+What are some of the first things you should look at on a graph when reading it to make sure that it is actually telling you what it is supposed to?
+
+Is there ever a reasonable time to intentionally make bad graphs?
+
+if Minard made his famous graphic by hand, or what kind of tools he used, since he did not have the technology we have today
+
+Are there any situations in which adding dimensions to a visualization would be useful?
+
+Is there actually a time and place for 3d graphics at all? Is it time to remove some portion of them from our data visualization arsenal altogether?
+
+I would like to get the data-to-ink ratio explained a little more. I didn't quite grasp it
+
+questions about 3d graphics:
+
+https://shiny.rit.albany.edu/stat/mod1/
+
+
+
+When would we use area graphs?

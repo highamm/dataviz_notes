@@ -1,0 +1,11 @@
+The following is a list of villagers on an island in Animal Crossing. 
+Each villager has his or her own birthday and the name of the villager is also
+given. Finally, how long the villager has lived on the island is given
+in number of weeks.
+
+Jan. 1 - Joey - Duck - 9 weeks
+Dec. 21 - Blanche - ? - 11 weeks
+Feb. 21 - Puck - Penguin - 15 weeks
+Dec. 11 - Sterling - Eagle - 17 weeks
+May. 28 - Renee - ? - 17 weeks
+Oct. 19 - N/A - Human - 17 weeks
