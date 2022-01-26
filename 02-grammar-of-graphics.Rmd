@@ -178,6 +178,10 @@ questions about 3d graphics:
 
 https://shiny.rit.albany.edu/stat/mod1/
 
-
-
 When would we use area graphs?
+
+
+
+Should all graphs start at 0? scatterplots? bar charts? Line charts? Boxplots?
+
+<https://flowingdata.com/2015/08/31/bar-chart-baselines-start-at-zero/> 

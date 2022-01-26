@@ -7,6 +7,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Aside: Baseline of Zero?
+
+```{r}
+library(palmerpenguins)
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm)) +
+  geom_point() +
+  xlim(c(0, 60)) +
+  ylim(c(0, 25))
+
+```
+
 ## Section 5.1: Billboard
 
 ```{r}
@@ -23,11 +35,27 @@ wiki_top15 <- wiki_hot_100s %>%
   arrange(desc(nsongs)) %>%
   slice(1:15) %>%
   mutate(artist = fct_reorder(artist, nsongs))
+
+
+## exercise 3
+wiki_hot_100s %>% as_tibble() %>% 
+  mutate(artist2 = str_remove(artist, 
+                              pattern = " featuring .*")) %>%
+  tail() %>%
+  print(width = Inf)
+
 ggplot(data = wiki_top15, aes(x = artist,
                               y = nsongs)) +
   geom_col() +
-  coord_flip()
+  coord_flip() 
 
+## exercise 4
+ggplot(data = wiki_top15, aes(x = artist,
+                              y = nsongs)) +
+  geom_point() +
+  geom_segment(aes(x = artist, xend = artist,
+                   y = 0, yend = nsongs)) +
+  coord_flip()
 
 max(wiki_hot_100s$year)
 library(rvest)
@@ -80,12 +108,21 @@ wiki_tibble <- as_tibble(wiki_hot_100s) %>% ## convert billboard data to tibble
          no = as.integer(no)) ## change variable types to match with scraped data
 
 hot100_df <- bind_rows(wiki_tibble, df_2017_present)
+```
+
+
+```{r}
 library(tidyverse)
 hpi_df <- read_csv("data/hpi-tidy.csv")
 hpi_df
 ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing)) +
   geom_point()
-hpi_us <- hpi_df %>% filter(Country == "United States of America")
+
+hpi_us <- hpi_df %>%
+  filter(Country == "United States of America" |
+           Country == "Kenya" |
+           Country == "Brazil")
+
 hpi_us
 ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing)) +
   geom_point() +
