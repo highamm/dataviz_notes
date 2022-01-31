@@ -142,6 +142,13 @@ plot1 <- ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing,
                                    label = Country)) +
   geom_point()
 ggplotly(plot1, tooltip = "label")
+```
+
+## Exercise 3
+
+Advantages: interesting, allows user to explore
+Disadvantages: requires a computer, adds extra "stuff", bad for making a particular point about the graph (like Western countries have high footprint)
+```{r}
 ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing)) +
   geom_point() +
   geom_label_repel(data = hpi_us, aes(label = Country)) +
@@ -153,10 +160,19 @@ ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing)) +
     y = "Wellbeing") ## change y axis label
 ggplot(data = hpi_df, aes(x = Footprint, y = HappyLifeYears, colour = Region)) +
   geom_point() +
-  scale_colour_brewer(palette = "Accent")
+  scale_colour_brewer(palette = "Dark2")
+
+
 ggplot(data = hpi_df, aes(x = Footprint, y = HappyLifeYears, colour = Region)) +
   geom_point() +
   scale_colour_viridis_d(option = "plasma")
+?scale_colour_viridis_d
+```
+
+## Exercise 6
+
+`_d` is for discrete values, `_c` is for continuous variables, and `_b` is for binning a continuous variable.
+```{r}
 ggplot(data = hpi_df, aes(x = Footprint, y = HappyLifeYears)) +
   geom_point() +
   facet_wrap( ~ Region)
@@ -166,7 +182,14 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
 ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
   geom_point() +
   facet_wrap( ~ species) ## faceting probably unnecessary: colour is better
+```
 
+Faceting is more useful if:
+
+* there are "more" categories and
+* if there is a lot of overlap between groups
+
+```{r}
 colour_bad <- tibble(x = rnorm(500, 0, 1), y = rnorm(500, 0, 1),
        groupvar = c(rep("A", 50), rep("B", 50),
                     rep("C", 50), rep("D", 50),
