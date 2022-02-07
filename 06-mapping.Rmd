@@ -37,7 +37,7 @@ ggplot(data = state_full, aes(x = long, y = lat, group = group)) +
   geom_polygon(colour = "black", aes(fill = pop_change)) +
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
   theme_void() +
-  scale_fill_distiller(type = "div", direction = 1)
+  scale_fill_distiller(type = "div", direction = 1, limits = c(-1, 1))
 ## should change so that middle colour is 0
 
 ## fermenter is for binning continuous
@@ -70,10 +70,21 @@ covid_df <- left_join(tcases_long, active_long,
 
 covid_SLC <- covid_df %>% filter(NAME == "St. Lawrence County")
 covid_sub <- covid_df %>% filter(NAME != "St. Lawrence County")
+
+covid_SLC
+covid_sub
+
+## exercise 1
+ggplot(data = covid_SLC, aes(x = date, y =active_cases)) +
+  geom_line()
+
+
 ## install.packages("sf")
 library(sf)
 shp <- read_sf("data/SLC_Civil_Boundaries_SHP/slc.shp") %>%
   st_transform(st_crs("+proj=longlat"))
+shp
+
 ggplot(data = shp) +
   geom_sf() +
   theme_void()
