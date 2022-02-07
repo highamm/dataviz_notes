@@ -1,0 +1,108 @@
+---
+title: "Mapping"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+## install.packages("maps")
+library(maps)
+library(tidyverse)
+state_df <- ggplot2::map_data("state")
+state_df %>% nrow()
+
+ggplot(data = state_df,
+            mapping = aes(x = long, y = lat,
+                          group = group)) +
+  geom_polygon(fill = "white", colour = "black") +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme(axis.text = element_blank()) +
+  theme_void()
+
+
+
+## install.packages("usdata")
+library(usdata)
+state_stats
+state_stats <- state_stats %>% mutate(state = str_to_lower(state))
+state_full <- left_join(state_df, state_stats, by = c("region" = "state"))
+
+state_full <- state_full %>% as_tibble() %>%
+  mutate(pop_change = 100 * (pop2010 - pop2000) / pop2000)
+
+ggplot(data = state_full, aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = pop_change)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_distiller(type = "div", direction = 1)
+## should change so that middle colour is 0
+
+## fermenter is for binning continuous
+## brewer is for discrete colours
+## distiller is for continuous variable
+
+
+
+
+active <- read_csv("https://raw.githubusercontent.com/iramler/stlawu_covid/main/slc_towns_active_cases.csv", n_max = 34)
+tcases <- read_csv("https://raw.githubusercontent.com/iramler/stlawu_covid/main/slc_towns_total_cases.csv", n_max = 34)
+
+active_long <- active %>% pivot_longer(5:ncol(active), names_to = "date",
+                                       values_to = "cases")
+## repeat for total cases
+tcases_long <- tcases %>% pivot_longer(5:ncol(tcases), names_to = "date",
+                                       values_to = "cases")
+
+library(lubridate)
+covid_df <- left_join(tcases_long, active_long,
+                      by = c("date", "Order", "NAME")) %>%
+  mutate(date = mdy(date)) %>%
+  rename(total_cases = cases.x,
+         active_cases = cases.y) %>%
+  mutate(total_cases = if_else(is.na(total_cases),
+                               true = 0, false = total_cases),
+         active_cases = if_else(is.na(active_cases),
+                                      true = 0, false = active_cases))
+  
+
+covid_SLC <- covid_df %>% filter(NAME == "St. Lawrence County")
+covid_sub <- covid_df %>% filter(NAME != "St. Lawrence County")
+## install.packages("sf")
+library(sf)
+shp <- read_sf("data/SLC_Civil_Boundaries_SHP/slc.shp") %>%
+  st_transform(st_crs("+proj=longlat"))
+ggplot(data = shp) +
+  geom_sf() +
+  theme_void()
+full_df <- left_join(shp, covid_sub, by = "NAME") %>%
+  filter(date == max(date)) ## only plot cases on the most recent date
+ggplot(data = full_df) +
+  geom_sf(aes(fill = active_cases)) +
+  theme_void()
+## install.packages("devtools")
+library(devtools)
+## devtools::install_github("li-wen-li/uszipcodes")
+library(uszipcodes)
+beers <- read_csv("data/breweries.csv") 
+raw_zip <- uszipcodes::get_zip(beers$address)
+beers$Zip <- as.integer(uszipcodes::clean_zip(raw_zip))
+
+## only keep zip, lat, and long
+zip_tab <- zip_table %>% dplyr::select(Zip, Latitude, Longitude)
+beer_location <- inner_join(beers, zip_tab)
+content <- beer_location %>%
+  mutate(popup = paste0('<a href =', beer_location$website, '>',
+                        beer_location$brewery_name, '</a>'))
+library(leaflet)
+
+beer_map <- leaflet(beer_location) %>%
+  setView(lng = -98.583, lat = 39.833, zoom = 4) %>% 
+  addTiles() %>% 
+  addProviderTiles(providers$Wikimedia) %>% 
+  addMarkers(lng = beer_location$Longitude, lat = beer_location$Latitude,
+             clusterOptions = markerClusterOptions(),
+             popup = content$popup)
+```
