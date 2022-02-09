@@ -37,7 +37,7 @@ ggplot(data = state_full, aes(x = long, y = lat, group = group)) +
   geom_polygon(colour = "black", aes(fill = pop_change)) +
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
   theme_void() +
-  scale_fill_distiller(type = "div", direction = 1, limits = c(-1, 1))
+  scale_fill_distiller(type = "div", direction = 1)
 ## should change so that middle colour is 0
 
 ## fermenter is for binning continuous
@@ -88,11 +88,24 @@ shp
 ggplot(data = shp) +
   geom_sf() +
   theme_void()
+
 full_df <- left_join(shp, covid_sub, by = "NAME") %>%
   filter(date == max(date)) ## only plot cases on the most recent date
 ggplot(data = full_df) +
   geom_sf(aes(fill = active_cases)) +
-  theme_void()
+  theme_void() +
+  scale_fill_viridis_b(n.breaks = 5)
+
+ggplot(data = full_df) +
+  geom_sf(aes(fill = active_cases)) +
+  theme_void() +
+  scale_fill_viridis_c() +
+  geom_sf_text(aes(label = active_cases), colour = "white")
+```
+
+## Section 6.4: Leaflet
+
+```{r}
 ## install.packages("devtools")
 library(devtools)
 ## devtools::install_github("li-wen-li/uszipcodes")
@@ -112,8 +125,15 @@ library(leaflet)
 beer_map <- leaflet(beer_location) %>%
   setView(lng = -98.583, lat = 39.833, zoom = 4) %>% 
   addTiles() %>% 
-  addProviderTiles(providers$Wikimedia) %>% 
+  addProviderTiles(providers$Stamen.Watercolor) %>% 
   addMarkers(lng = beer_location$Longitude, lat = beer_location$Latitude,
              clusterOptions = markerClusterOptions(),
              popup = content$popup)
+beer_map
 ```
+
+Exercise 1: get rid of breweries that do not have a valid zip code and would also remove zip codes with no breweries
+
+Exercise 2:
+
+
