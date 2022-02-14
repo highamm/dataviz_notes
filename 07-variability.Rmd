@@ -1,0 +1,153 @@
+---
+title: "Expressing Variability"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+pokemon_df <- read_csv("data/pokemon_full.csv")
+pokemon_height <- pokemon_df %>% 
+  filter(Type %in% c("Bug", "Electric", "Fighting", "Flying",
+                     "Grass", "Steel")) %>%
+  group_by(Type) %>%
+  summarise(avg_height = mean(height)) %>%
+  mutate(Type = fct_reorder(Type, avg_height))
+
+pokemon_small <- pokemon_df %>% 
+  filter(Type %in% c("Bug", "Electric", "Fighting", "Flying",
+                     "Grass", "Steel")) %>%
+  group_by(Type) %>%
+  mutate(meanheight = mean(height, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(meanheight) %>%
+  mutate(Type = fct_inorder(Type))
+
+ggplot(data = pokemon_small, aes(x = Type, y = height)) +
+  geom_point(alpha = 0.3) +
+  coord_flip() +
+  geom_point(data = pokemon_height, aes(y = avg_height),
+             colour = "red")
+```
+
+Exercise 1: missing sample size for each type and we cannot see the variability/distribution of heights for each type.
+
+Exercise 3: media has to consider statistical knowledge of audience. Sometimes you do not actually have the underlying data: only summary stats. 
+
+```{r}
+## install.packages("openintro")
+library(openintro)
+data(mlb_players_18)
+mlb_sum <- mlb_players_18 %>% group_by(position) %>%
+  summarise(med_hr = median(HR)) %>%
+  mutate(position = fct_reorder(position, med_hr))
+ggplot(data = mlb_sum, aes(x = position, y = med_hr)) +
+  geom_col() +
+  coord_flip()
+
+## exercise 4
+
+mlb_players_18 <- mlb_players_18 %>% 
+  mutate(position = fct_reorder(position, HR, .fun = median)) %>% group_by(position) %>%
+  mutate(nplayers = n())
+
+p1 <- ggplot(data = mlb_players_18, aes(x = position, y = HR,
+                                        text = nplayers)) +
+  geom_boxplot() +
+  coord_flip()
+
+## exercise 5
+library(plotly)
+ggplotly(p1, tooltip = "text")
+
+mlb_players_18 
+```
+
+```{r}
+nfl_df <- read_csv("data/standings.csv")
+nfl_sum <- nfl_df %>% group_by(team) %>%
+  summarise(nwins = sum(wins),
+            nlosses = sum(loss)) %>%
+  mutate(ngames = nwins + nlosses,
+         win_percentage = 100 * nwins / ngames) %>%
+  mutate(team = fct_reorder(team, win_percentage))
+ggplot(data = nfl_sum, aes(x = team, y = win_percentage)) +
+  geom_point() +
+  geom_segment(aes(x = team, xend = team, y = 0, yend = win_percentage)) +
+  coord_flip() +
+  labs(y = "Win Percentage")
+set.seed(231491)
+n <- 50
+beta0 <- 4
+beta1 <- -2
+x <- 1:n
+epsilon <- rnorm(n, 0, 75)
+y <- beta0 + beta1 * x + epsilon
+df <- tibble(x = x, y = y)
+ggplot(data = df, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+sim_reg <- function(n = 50, beta0 = 4, beta1 = -2, s_eps = 75) {
+  x = 1:n
+  epsilon <- rnorm(n, 0, 75)
+
+  y <- beta0 + beta1 * x + epsilon
+  df <- tibble(x = x, y = y)
+  
+  mod <- lm(y ~ x, data = df) 
+  coefs <- mod$coefficients
+  return(coefs)
+}
+sim_reg()
+
+
+output <- purrr::rerun(1000, sim_reg())
+reg_df <- bind_rows(output) %>% rename(intercept = `(Intercept)`, slope = x)
+true_df <- tibble(intercept = 4, slope = -2)
+
+ggplot(data = reg_df) +
+  geom_abline(aes(intercept = intercept, slope = slope), alpha = 0.05) +
+  xlim(c(0, n + 1)) +
+  ylim(c(4 - 2 * 75 - 50, 4 - 2 * 0 + 50)) +
+  geom_abline(data = true_df, aes(intercept = intercept, slope = slope),
+              colour = "red") +
+  labs(x = "x",
+       y = "response")
+statsurvey_df <- read_csv("data/stat113_survey.csv")
+```
+
+```{r}
+statsurvey_df <- read_csv("data/stat113_survey.csv")
+ggplot(data = statsurvey_df, aes(x = time_both,
+                                 fill = Tattoo)) +
+  geom_bar()
+## filter NA
+## use fct_inorder() to order time_both variable
+## 
+## 1. compute the proportion and sample size for each year
+## 2. compute se for each year and adding it and subtracting
+## it from the proportion
+## 3. use a geom to plot the standard errors
+
+statsurvey_df %>% filter(!is.na(Tattoo)) %>%
+  group_by(time_both, Tattoo) %>%
+  summarise(ncount = n()) %>%
+  ungroup() %>%
+  group_by(time_both) %>%
+  mutate(ntotal = sum(ncount)) %>%
+  ungroup() %>%
+  filter(Tattoo == "Yes") %>%
+  mutate(prop = ncount / ntotal,
+         se = sqrt(prop * (1 - prop) / ntotal),
+         l_se = prop - se,
+         u_se = prop + se)
+
+statsurvey_df %>% filter(!is.na(Tattoo)) %>%
+  group_by(time_both, Tattoo) %>%
+  summarise(ncount = n()) %>%
+  ungroup() %>%
+  pivot_wider(names_from = "Tattoo", values_from = "ncount")
+```
