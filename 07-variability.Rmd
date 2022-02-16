@@ -54,14 +54,17 @@ mlb_players_18 <- mlb_players_18 %>%
   mutate(position = fct_reorder(position, HR, .fun = median)) %>% group_by(position) %>%
   mutate(nplayers = n())
 
-p1 <- ggplot(data = mlb_players_18, aes(x = position, y = HR,
-                                        text = nplayers)) +
-  geom_boxplot() +
+library(glue)
+p1 <- ggplot(data = mlb_players_18) +
+  geom_boxplot(aes(x = position, y = HR)) +
+  geom_point(alpha = 0, aes(x = position, y = HR,
+                            text = paste0("n = ", nplayers))) +
   coord_flip()
 
 ## exercise 5
 library(plotly)
-ggplotly(p1, tooltip = "text")
+ggplotly(p1, tooltip = "text") %>%
+  style(hoverinfo = "skip", traces = 1) ## says to "skip" the first geom()
 
 mlb_players_18 
 ```
@@ -74,11 +77,28 @@ nfl_sum <- nfl_df %>% group_by(team) %>%
   mutate(ngames = nwins + nlosses,
          win_percentage = 100 * nwins / ngames) %>%
   mutate(team = fct_reorder(team, win_percentage))
+
+nfl_df <- nfl_df %>% mutate(win_percent = 100 * wins / (wins + loss)) %>%
+  select(win_percent, everything())
+
+nfl_both <- left_join(nfl_df, nfl_sum) %>%
+  mutate(team = fct_reorder(team, win_percentage))
+
+ggplot(data = nfl_both, aes(x = team, y = win_percent)) +
+  geom_point(alpha = 0.2) +
+  geom_point(data = nfl_sum, aes(y = win_percentage, colour = "Overall Win Percent")) +
+  coord_flip() +
+  scale_colour_manual(values = c("Overall Win Percent" = "red"))
+
+
 ggplot(data = nfl_sum, aes(x = team, y = win_percentage)) +
   geom_point() +
   geom_segment(aes(x = team, xend = team, y = 0, yend = win_percentage)) +
   coord_flip() +
   labs(y = "Win Percentage")
+
+
+
 set.seed(231491)
 n <- 50
 beta0 <- 4
@@ -132,7 +152,7 @@ ggplot(data = statsurvey_df, aes(x = time_both,
 ## it from the proportion
 ## 3. use a geom to plot the standard errors
 
-statsurvey_df %>% filter(!is.na(Tattoo)) %>%
+statsurvey_tattoo <- statsurvey_df %>% filter(!is.na(Tattoo)) %>%
   group_by(time_both, Tattoo) %>%
   summarise(ncount = n()) %>%
   ungroup() %>%
@@ -145,9 +165,28 @@ statsurvey_df %>% filter(!is.na(Tattoo)) %>%
          l_se = prop - se,
          u_se = prop + se)
 
-statsurvey_df %>% filter(!is.na(Tattoo)) %>%
-  group_by(time_both, Tattoo) %>%
-  summarise(ncount = n()) %>%
-  ungroup() %>%
-  pivot_wider(names_from = "Tattoo", values_from = "ncount")
+statsurvey_tattoo <- statsurvey_tattoo %>%
+  separate(time_both, into = c("semester", "year"),
+                               sep = 1) %>%
+  arrange(year, desc(semester)) %>%
+  unite(col = "time_both", c(semester, year)) %>%
+  mutate(time_both = fct_inorder(time_both))
+
+ggplot(data = statsurvey_tattoo, aes(x = time_both, y = prop)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = l_se, ymax = u_se))
+
+
+stat_gpa <- statsurvey_df %>% filter(!is.na(GPA)) %>%
+  mutate(time_both = fct_inorder(time_both)) %>%
+  group_by(time_both) %>%
+  summarise(meangpa = mean(GPA),
+            sdgpa = sd(GPA),
+            ngpa = n()) %>%
+  mutate(l_se = meangpa - sdgpa / sqrt(ngpa),
+         u_se = meangpa + sdgpa / sqrt(ngpa))
+
+ggplot(stat_gpa, aes(x = time_both, y = meangpa)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = l_se, ymax = u_se))
 ```
