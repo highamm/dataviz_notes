@@ -7,6 +7,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## aside: proportions
+
+```{r}
+library(tidyverse)
+plot_df <- tibble(samp_props = seq(from = 0, to = 1, by = 0.001),
+       se = sqrt(samp_props * (1 - samp_props)))
+
+ggplot(data = plot_df, aes(x = samp_props, y = se)) +
+  geom_line()
+```
+
 ```{r}
 library(shiny)
 library(shiny)

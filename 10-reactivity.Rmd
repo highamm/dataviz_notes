@@ -1,0 +1,30 @@
+---
+title: "Section 10: Reactivity"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Canton, NY Weather Data
+
+```{r}
+library(tidyverse)
+library(lubridate)
+weather_df <- read_delim("data/canton_ny_weather_data.txt")
+
+weather_janfeb <- weather_df %>%
+  mutate(month = month(datetime),
+                      year = year(datetime),
+                      day_of_year = yday(datetime)) %>%
+  select(month, year, day_of_year, everything()) %>%
+  filter(month == 1 | month == 2) %>%
+  mutate(year = factor(year))
+
+ggplot(data = weather_janfeb, aes(x = day_of_year,
+                                  y = tempmin,
+                                  colour = year)) +
+  geom_line() +
+  scale_colour_viridis_d(begin = 0.1, end = 0.9)
+```

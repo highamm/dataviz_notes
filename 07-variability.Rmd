@@ -26,7 +26,7 @@ pokemon_small <- pokemon_df %>%
   arrange(meanheight) %>%
   mutate(Type = fct_inorder(Type))
 
-ggplot(data = pokemon_small, aes(x = Type, y = height)) +
+ggplot(data = pokemon_height, aes(x = Type, y = avg_height)) +
   geom_point(alpha = 0.3) +
   coord_flip() +
   geom_point(data = pokemon_height, aes(y = avg_height),
