@@ -1,3 +1,17 @@
+test_fun <- function(x = 4, y = 3, z = 6) {
+  
+  x2 <- x ^ 2
+  y2 <- y ^ 2
+  rootz <- sqrt(z)
+  
+  ssxy <- x2 + y2
+  
+  final <- ssxy / rootz
+  
+  return(final)
+}
+
+test_fun()
 library(tidyverse)
 atp_df <- read_csv("data/atp_matches_2019.csv")
 wta_df <- read_csv("data/wta_matches_2019.csv")
@@ -65,7 +79,7 @@ server <- function(input, output, session) {
     # geom_histogram(colour = "black", fill = "white", bins = 15)
     base_plot <- ggplot(df_sub(), aes(x = .data[[input$varchoice]]))
     
-    
+    browser()
     if (is.numeric(df_sub()[[input$varchoice]]) == TRUE) {
       
       base_plot + geom_histogram(colour = "black", fill = "white",
@@ -86,6 +100,132 @@ server <- function(input, output, session) {
   output$wintab <- renderTable({
     table(df_sub()$result)
   })
+  
+
+  
+}
+
+shinyApp(ui, server)
+
+
+
+
+####################################
+####################################
+## Error 1
+## 
+
+ui <- fluidPage(
+  sidebarLayout(sidebarPanel(
+    selectizeInput("playerchoice",
+                   label = "Choose a Player", choices = levels(factor(df$player)),
+                   selected = "Aryna Sabalenka"),
+    radioButtons("varchoice", label = "Choose a Statistic",
+                 choices = var_choices),
+    sliderInput("binnumber", label = "Choose a Number of Bins", 
+                min = 1, max = 50, value = 15, step = 1)),
+    mainPanel(plotOutput("histgraph"),
+              tableOutput("wintab"))
+  )
+)
+
+server <- function(input, output, session) {
+  
+  df_sub <- reactive({
+    df %>% filter(player == input$playerchoice)
+  })
+
+  
+  hist_plot <- reactive({
+    
+    # ggplot(df_sub(), aes_string(x = input$varchoice)) +
+    # geom_histogram(colour = "black", fill = "white", bins = 15)
+    base_plot <- ggplot(df_sub, aes(x = .data[[input$varchoice]]))
+    
+
+    if (is.numeric(df_sub()[[input$varchoice]]) == TRUE) {
+      
+      base_plot + geom_histogram(colour = "black", fill = "white",
+                                 bins = input$binnumber) +
+        theme_minimal(base_size = 22)
+    } else if (is.character(df_sub()[[input$varchoice]])) {
+      base_plot + geom_bar(colour = "black", fill = "white") +
+        theme_minimal(base_size = 22) +
+        coord_flip()
+    }
+  })
+  
+  output$histgraph <- renderPlot({
+    hist_plot()
+  })
+  
+  
+  output$wintab <- renderTable({
+    table(df_sub()$result)
+  })
+  
+  
+  
+}
+
+shinyApp(ui, server)
+
+##############################
+##############################
+  ## Error 2
+  
+ui <- fluidPage(
+  sidebarLayout(sidebarPanel(
+    selectizeInput("playerchoice",
+                   label = "Choose a Player", choices = levels(factor(df$player)),
+                   selected = "Aryna Sabalenka"),
+    radioButtons("varchoice", label = "Choose a Statistic",
+                 choices = var_choices),
+    sliderInput("binnumber", label = "Choose a Number of Bins", 
+                min = 1, max = 50, value = 15, step = 1)),
+    mainPanel(plotOutput("histgraph"),
+              tableOutput("wintab"))
+  )
+)
+
+server <- function(input, output, session) {
+  
+  df_sub <- reactive({
+    df %>% filter(player == input$playerchoice)
+  })
+  
+  
+  hist_plot <- reactive({
+    
+    browser()
+    
+    # ggplot(df_sub(), aes_string(x = input$varchoice)) +
+    # geom_histogram(colour = "black", fill = "white", bins = 15)
+    base_plot <- ggplot(df_sub(), aes(x = df_sub()[[input$vrchoice]]))
+    
+    
+    if (is.numeric(df_sub()[[input$varchoice]]) == TRUE) {
+      
+      base_plot + geom_histogram(colour = "black", fill = "white",
+                                 bins = input$binnumber) +
+        theme_minimal(base_size = 22)
+    } else if (is.character(df_sub()[[input$varchoice]])) {
+      base_plot + geom_bar(colour = "black", fill = "white") +
+        theme_minimal(base_size = 22) +
+        coord_flip()
+    }
+  })
+  
+  output$histgraph <- renderPlot({
+    hist_plot()
+  })
+  
+  
+  output$wintab <- renderTable({
+    table(df_sub()$result)
+  })
+  
+  
   
 }
 
