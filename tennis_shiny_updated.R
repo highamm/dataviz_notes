@@ -78,10 +78,10 @@ server <- function(input, output, session) {
     }
   })
   
-  
   output$histgraph <- renderPlot({
     hist_plot()
   })
+
   
   output$wintab <- renderTable({
     table(df_sub()$result)
