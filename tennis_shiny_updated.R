@@ -1,17 +1,24 @@
 test_fun <- function(x = 4, y = 3, z = 6) {
   
   x2 <- x ^ 2
+  
   y2 <- y ^ 2
+  
+  
   rootz <- sqrt(z)
   
+  print(rootz)
   ssxy <- x2 + y2
   
+  print(ssxy)
   final <- ssxy / rootz
   
   return(final)
 }
 
-test_fun()
+test_fun(x = 1, y = 4, z = -4)
+
+
 library(tidyverse)
 atp_df <- read_csv("data/atp_matches_2019.csv")
 wta_df <- read_csv("data/wta_matches_2019.csv")
@@ -140,7 +147,7 @@ server <- function(input, output, session) {
     
     # ggplot(df_sub(), aes_string(x = input$varchoice)) +
     # geom_histogram(colour = "black", fill = "white", bins = 15)
-    base_plot <- ggplot(df_sub, aes(x = .data[[input$varchoice]]))
+    base_plot <- ggplot(df_sub(), aes(x = .data[[input$varchoice]]))
     
 
     if (is.numeric(df_sub()[[input$varchoice]]) == TRUE) {
