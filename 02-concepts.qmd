@@ -1,0 +1,105 @@
+---
+title: "Section 2: Basics"
+format: html
+---
+
+```{r}
+
+```
+
+```{r}
+library(palmerpenguins)
+library(tidyverse)
+theme_set(theme_minimal())
+penguins
+
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly() 
+
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  facet_wrap(~ species)
+
+ggplot(data = penguins, aes(x = species)) +
+  geom_bar(stat = "count") ## don't need stat = "count" because it's the default.
+
+penguins <- penguins |> as_tibble()
+
+penguins_sum <- penguins |> group_by(species) |>
+  summarise(n_count = n())
+
+ggplot(data = penguins_sum, aes(x = species,
+                                y = n_count)) +
+  geom_bar(stat = "identity")
+## equivalent to
+ggplot(data = penguins_sum, aes(x = species,
+                                y = n_count)) +
+  geom_col()
+```
+
+```{r}
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "stack") + ## don't need "stack" because it's default
+  scale_fill_viridis_d()
+
+penguins |> na.omit() ## gets rid of any row with NA
+penguins_nomiss <- penguins |> filter(!is.na(sex))
+  
+ggplot(data = penguins_nomiss, aes(x = species, fill = sex)) +
+  geom_bar(position = "dodge") + 
+  scale_fill_viridis_d()
+```
+
+Exercise 1.
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm)) +
+  geom_point(stat = "identity",
+             position = "identity") +
+  facet_null() +
+  coord_cartesian()
+```
+
+## Your Turn
+
+Exercise 1.
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_density()
+```
+
+Exercise 2. 
+
+```{r}
+ggplot(data = penguins, aes(x = sex, y = body_mass_g)) +
+  geom_jitter(width = 0.10)
+```
+
+Exercise 3.
+
+```{r}
+## a. 
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly(colour = "darkred")
+
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly(aes(colour = species))
+```
+
+Exercise 4.
+
+```{r}
+## a
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm)) +
+  geom_point(aes(colour = species)) +
+  geom_smooth()
+
+## b
+ggplot(data = penguins, aes(x = bill_length_mm,
+                            y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(aes(colour = species))
+```
