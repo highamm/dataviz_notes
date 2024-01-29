@@ -101,3 +101,17 @@ ggplot(data = penguins, aes(x = bill_length_mm,
   geom_point(aes(colour = body_mass_g)) +
   scale_colour_viridis_b() ## b is binning a continuous
 ```
+
+Exercise 3.
+
+```{r}
+hpi_df <- read_csv(here("data/hpi-tidy.csv"))
+ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing, colour = Region)) +
+  geom_point() +
+  theme(plot.background = element_rect(fill = "yellow"),
+        axis.text = element_text(size = 4,
+                                 family = "courier",
+                                 colour = "green"),
+        axis.line = element_line(arrow = arrow()),
+        panel.grid = element_blank())
+```
