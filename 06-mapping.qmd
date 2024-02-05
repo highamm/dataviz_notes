@@ -1,0 +1,86 @@
+---
+title: "Section 6: Mapping"
+format: html
+---
+
+## Section 6.2
+
+```{r}
+library(tidyverse)
+active <- read_csv("https://raw.githubusercontent.com/iramler/stlawu_covid/main/slc_towns_active_cases.csv", n_max = 34)
+tcases <- read_csv("https://raw.githubusercontent.com/iramler/stlawu_covid/main/slc_towns_total_cases.csv", n_max = 34)
+
+active_long <- active |> pivot_longer(5:ncol(active), names_to = "date",
+                                       values_to = "cases")
+## repeat for total cases
+tcases_long <- tcases |> pivot_longer(5:ncol(tcases), names_to = "date",
+                                       values_to = "cases")
+
+library(lubridate)
+covid_df <- left_join(tcases_long, active_long,
+                      by = c("date", "Order", "NAME")) |>
+  mutate(date = mdy(date)) |>
+  rename(total_cases = cases.x,
+         active_cases = cases.y) |>
+  mutate(total_cases = if_else(is.na(total_cases),
+                               true = 0, false = total_cases),
+         active_cases = if_else(is.na(active_cases),
+                                      true = 0, false = active_cases))
+  
+
+covid_SLC <- covid_df |> filter(NAME == "St. Lawrence County")
+covid_sub <- covid_df |> filter(NAME != "St. Lawrence County")
+ggplot(data = covid_SLC, aes(x = date,
+                             y = active_cases)) +
+  geom_line() +
+  theme_minimal()
+```
+
+```{r}
+## install.packages("sf")
+library(sf)
+shp <- read_sf("data/SLC_Civil_Boundaries_SHP/slc.shp") |>
+  st_transform(st_crs("+proj=longlat"))
+
+ggplot(data = shp) +
+  geom_sf() +
+  theme_void()
+
+full_df <- left_join(shp, covid_sub, by = "NAME") |>
+  filter(date == max(date))
+         
+ggplot(data = full_df) +
+  geom_sf(aes(fill = active_cases)) +
+  theme_void() +
+  scale_fill_viridis_b(option = "turbo") +
+  geom_sf_text(aes(label = active_cases),
+               colour = "grey40")
+## binning means that we lose some 
+## information, but results in a simpler
+## plot.
+
+```
+
+## Your Turn
+
+```{r}
+library(tidyverse)
+library(here)
+hpi_df <- read_csv(here("data/hpi-tidy.csv"))
+hpi_df
+
+## exercise 1
+world_df <- map_data("world")
+
+hpi_df |> distinct(Country) |> print(n = Inf)
+world_df |> distinct(region)
+hpi_df <- hpi_df |> mutate(Country = fct_recode(Country,
+                                      "USA" = "United States of America"))
+world_full <- left_join(world_df, hpi_df,
+                        by = c("region" = "Country"))
+ggplot(data = world_full, aes(x = long, y = lat,
+                              group = group)) +
+  geom_polygon(aes(fill = Wellbeing)) +
+  coord_map(projection = "mercator", xlim = c(-180, 180)) +
+  scale_fill_viridis_c()
+```
