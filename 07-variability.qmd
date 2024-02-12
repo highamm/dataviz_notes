@@ -62,3 +62,55 @@ ggplot(data = tattoo_plot, aes(x = academic_year,
   geom_point() +
   theme_minimal()
 ```
+
+
+Fitting a Model with GPA 
+
+```{r}
+library(here)
+library(tidyverse)
+library(broom)
+
+statsurvey_df <- read_csv(here("data/stat113_survey.csv"))
+
+statsurvey_nomiss <- statsurvey_df |> filter(!is.na(GPA))
+statsurvey_nomiss <- statsurvey_nomiss |>
+  mutate(time_year = as.numeric(time_year)) |>
+  mutate(a_year = if_else(time_semester == "S",
+                          true = time_year - 1,
+                          false = time_year)) |>
+  filter(GPA <= 4.0) |>
+  mutate(a_year_fact = as.factor(a_year),
+         a_year = a_year + 2000)
+
+year_linear <- lm(GPA ~ a_year, data = statsurvey_nomiss)
+year_linear |> tidy()
+
+year_fact <- lm(GPA ~ a_year_fact, data = statsurvey_nomiss)
+year_fact |> tidy()
+
+year_linear |> glance() |> print(width = Inf)
+year_fact |> glance() |> print(width = Inf)
+```
+
+Steps 2 and 3 on handout"
+
+```{r}
+## create "grid"
+grid <- tibble::tibble(a_year = 2005:2021)
+grid
+aug_linear <- augment(year_linear, newdata = grid,
+        interval = "confidence")
+ggplot(data = aug_linear, aes(x = a_year,
+                              y = .fitted)) +
+  geom_point(colour = "darkred") +
+  geom_errorbar(aes(ymin = .lower, ymax = .upper),
+                width = 0.25, colour = "darkred") +
+  geom_line(alpha = 0.4) +
+  theme_minimal() +
+  labs(caption = "Error bars are 95% confidence intervals for the mean response") +
+ geom_jitter(data = statsurvey_nomiss, aes(y = GPA),
+            width = 0.2, alpha = 0.1, shape = 21)
+## points look okay but there are so many that 
+## the reader may get distracted from the trend in the mean
+```
