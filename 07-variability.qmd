@@ -108,9 +108,35 @@ ggplot(data = aug_linear, aes(x = a_year,
                 width = 0.25, colour = "darkred") +
   geom_line(alpha = 0.4) +
   theme_minimal() +
-  labs(caption = "Error bars are 95% confidence intervals for the mean response") +
- geom_jitter(data = statsurvey_nomiss, aes(y = GPA),
-            width = 0.2, alpha = 0.1, shape = 21)
+  labs(caption = "Error bars are 95% confidence intervals for the mean response") #+
+ ##geom_jitter(data = statsurvey_nomiss, aes(y = GPA),
+  ##          width = 0.2, alpha = 0.1, shape = 21)
 ## points look okay but there are so many that 
 ## the reader may get distracted from the trend in the mean
+```
+
+Check Assumptions
+
+```{r}
+year_linear
+year_aug <- year_linear |> augment()
+year_aug
+## linearity
+## check scatterplot of GPA vs. academic year
+ggplot(data = year_aug, aes(x = a_year,
+                            y = GPA)) +
+  geom_jitter(width = 0.2, alpha = 0.2)
+## normality
+## histogram of the residuals
+ggplot(data = year_aug, aes(x = .resid)) +
+  geom_histogram(colour = "darkblue",
+                 fill = "lightblue",
+                 bins = 20)
+## constant variance
+## "residual plot" of residuals vs. fitted values
+ggplot(data = year_aug, aes(x = .fitted,
+                            y = .resid)) +
+  geom_jitter(width = 0.2, alpha = 0.2)
+## independence
+## think about how data was collected
 ```
