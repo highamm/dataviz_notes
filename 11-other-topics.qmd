@@ -1,0 +1,86 @@
+---
+title: "Other Topics"
+author: "Matt Higham"
+format: 
+  html:
+    embed-resources: true
+---
+
+## Section 11.2: Large Data
+
+```{r}
+library(tidyverse)
+diamonds |> nrow()
+
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point()
+
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_hex() +
+  scale_fill_viridis_c() +
+  theme_minimal()
+## from this plot, we can more easily
+## see the number of diamonds and we can
+## see that most diamonds are low carat and
+## low price (but we can no longer use
+## colour as an aesthetic)
+```
+
+Really large n
+
+```{r}
+library(tidyverse)
+n <- 10000000
+x <- rnorm(n, 0, 1)
+y <- x * rgamma(n, 3, 2)
+df <- tibble(x = x, y = y)
+
+df_small <- df |> slice_sample(n = 10000)
+ggplot(data = df_small, aes(x = x, y = y)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth()
+## a downside is that you cannot see
+## any extreme outliers
+```
+
+```{r}
+## install.packages("openintro")
+library(openintro)
+mlb_small <- mlb_players_18 |> filter(games > 50 & position != "P") ## only look at players 
+## who play at least 50 games in the season and are not pitchers
+
+library(GGally)
+ggpairs(data = mlb_small, columns = 6:11)
+
+ggcorr(data = mlb_small |> dplyr::select(4:ncol(mlb_small)))
+
+```
+
+## Your Turn
+
+Your Turn 1 through 3
+
+```{r}
+## set.seed() sets R's random number generator
+## so that we all get the same simulated data
+set.seed(1414111)
+x1 <- rnorm(100, 0, 1)
+x2 <- seq(-1, 1, length.out = 100)
+y <- 4 + 0 * x1 + 1 * x2^2 + rnorm(100, 0, 0.1)
+df <- tibble(x1 = x1, x2 = x2, y = y)
+ggcorr(data = df)
+```
+
+Based on the correlation plot, it looks like there is no association between x1 and y or between x2 and y.
+
+Exercise 2.
+
+```{r}
+ggplot(data = df, aes(x = x1, y = y)) +
+  geom_point()
+
+ggplot(data = df, aes(x = x2, y = y)) +
+  geom_point()
+```
+
+We see that there actually is a relationship between y and x2: it's just a non-linear relationship. `ggcorr()` is not perfect because it won't pick up on any non-linear relationship (as the correlation coefficient is only used for linear associations).
