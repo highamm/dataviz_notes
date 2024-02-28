@@ -84,3 +84,32 @@ ggplot(data = df, aes(x = x2, y = y)) +
 ```
 
 We see that there actually is a relationship between y and x2: it's just a non-linear relationship. `ggcorr()` is not perfect because it won't pick up on any non-linear relationship (as the correlation coefficient is only used for linear associations).
+
+```{r}
+library(faraway)
+library(broom)
+mod1 <- lm(brozek ~ weight, data = fat)
+mod1 |> tidy()
+
+library(GGally)
+
+ggpairs(fat, columns = c("brozek", "weight", "thigh", "adipos"))
+mod <- lm(brozek ~ weight + thigh + adipos, data = fat)
+mod |> tidy()
+
+grid <- fat |>
+  data_grid(
+    weight = seq_range(weight, n = 10),
+    thigh = fat |> pull(thigh) |> median(),
+    adipos = fat |> pull(adipos) |> median()
+  )
+
+fat_aug <- augment(mod, newdata = grid, interval = "confidence")
+ggplot(data = fat_aug, aes(x = weight, y = .fitted)) +
+  geom_line(linewidth = 1.7, colour = "blue") +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper), fill = "lightblue", alpha = 0.3) +
+  theme_minimal() +
+  geom_point(data = fat, aes(y = brozek), alpha = 0.7) +
+  labs(caption = "Thigh and Adipos fixed at Median values")
+
+```
