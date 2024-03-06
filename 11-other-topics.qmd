@@ -228,6 +228,7 @@ Your Turn 4.
 
 ```{r}
 library(gapminder)
+library(tidyverse)
 gapminder_df <- gapminder |> filter(year == 2002 | year == 2007)
 gapminder_df
 
@@ -249,4 +250,22 @@ ggplot(gapminder_diff, aes(x = diff_life)) +
                  fill = "darkorchid1",
                  bins = 20) +
   theme_minimal()
+## this is better than the boxplots but
+## it doesn't show the actual life expectancy
+## values
+
+gapminder_diff <- gapminder_diff |> mutate(change = 
+                           if_else(diff_life > 0,
+                                   true = "increase",
+                                   false = "decrease"))
+## c
+gapminder_joined <- left_join(gapminder_df,
+                              gapminder_diff)
+ggplot(data = gapminder_joined, aes(x = year,
+                                y = lifeExp)) +
+  geom_line(aes(group = country,
+                colour = change),
+            alpha = 0.4) +
+  theme_minimal() +
+  scale_colour_viridis_d()
 ```
