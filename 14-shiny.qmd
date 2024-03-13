@@ -23,6 +23,15 @@ df_long <- df |> pivot_longer(4:9, names_to = "type",
 df_major <- df_long |>
   filter(type == "major1" | type == "major2" | type == "major3")
 
+
+
+df_major |> filter(discipline == "STAT") |>
+  group_by(sex) |>
+  summarise(n_student = n())
+
+
+
+
 df_stat <- df_major |> filter(discipline == "STAT") 
 
 df_statfull <- semi_join(df_long, df_stat, by = "adm_id") |>
@@ -66,10 +75,14 @@ ui <- fluidPage(
                  sliderInput("n_majors",
                              label = "Choose Minimum:",
                              min = 1, max = 15,
-                             value = 1, step = 1)
+                             value = 1, step = 1),
+                 radioButtons("major_or_minor", 
+                              label = "Choose Majors or Minors",
+                              choices = c("major", "minor"))
                  ),
     mainPanel(
-      plotOutput("major_plot")
+      plotOutput("major_plot"),
+      tableOutput("sex_table")
     )
   )
 )
@@ -80,9 +93,7 @@ server <- function(input, output, session) {
     df_stat <- df_major |> filter(discipline == input$major_choice) 
     
     df_statfull <- semi_join(df_long, df_stat, by = "adm_id") |>
-      filter(type == "major1" |
-               type == "major2" | 
-               type == "major3")
+      filter(str_detect(type, pattern = input$major_or_minor) == TRUE)
     
     df_nostat <- df_statfull |> filter(discipline != input$major_choice &
                                          !is.na(discipline)) |>
@@ -100,6 +111,14 @@ server <- function(input, output, session) {
       geom_point(colour = "darkred") + 
       coord_flip() +
       theme_minimal(base_size = 29)
+  })
+  
+  output$sex_table <- renderTable({
+    
+    df_major |> filter(discipline == input$major_choice) |>
+      group_by(sex) |>
+      summarise(n_student = n())
+    
   })
   
   
