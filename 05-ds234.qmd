@@ -27,7 +27,9 @@ majors_plot <- df |> select(-starts_with("minor")) |>
 
 mcss_df <- majors_plot |> filter(major %in% c("STAT", "MATH", "CS"))
 mcss_df
-ggplot(data = majors_plot, aes(x = major, y = prop_male)) +
+majors_plotly <- ggplot(data = majors_plot, aes(x = major, y = prop_male,
+                               label = total_students,
+                               other_label =major )) +
   geom_segment(aes(xend = major, y = 0, yend = prop_male)) +
   geom_point() +
   geom_segment(data = mcss_df, aes(xend = major, y = 0, yend = prop_male), colour = "hotpink1", linewidth = 2) +
@@ -37,5 +39,7 @@ ggplot(data = majors_plot, aes(x = major, y = prop_male)) +
   theme(axis.text.x = element_text(size = 15)) +
   labs(caption = "Data Source: SLU Institutional Research Office")
 
+library(plotly)
+ggplotly(majors_plotly, tooltip = c("label", "other_label"))
 ## mutate(sex_ind = if_else(sex == "M", true = 1, false = 0))
 ```
