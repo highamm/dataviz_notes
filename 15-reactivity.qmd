@@ -8,8 +8,10 @@ library(tidyverse)
 
 theme_set(theme_minimal())
 
-atp_df <- read_csv("https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2023.csv")
-wta_df <- read_csv("https://raw.githubusercontent.com/JeffSackmann/tennis_wta/master/wta_matches_2023.csv")
+atp_df <- read_csv("https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2023.csv") |>
+  mutate(tour = "atp")
+wta_df <- read_csv("https://raw.githubusercontent.com/JeffSackmann/tennis_wta/master/wta_matches_2023.csv") |>
+  mutate(tour = "wta")
 
 both_df <- bind_rows(atp_df, wta_df)
 
@@ -32,18 +34,19 @@ major_tennis_w <- major_tennis |> filter(name == "winner_name")
 major_tennis_l <- major_tennis |> filter(name == "loser_name")
 
 w_small <- major_tennis_w |> select(value, winner_seed, w_ace, w_df,
-                                    w_svperc, w_firstwon, w_secondwon) |>
+                                    w_svperc, w_firstwon, w_secondwon, tour) |>
   rename(seed = winner_seed, ace = w_ace, df = w_df, svperc = w_svperc,
          firstwon = w_firstwon, secondwon = w_secondwon)
 
 l_small <- major_tennis_l |> select(value, loser_seed, l_ace, l_df,
-                                    l_svperc, l_firstwon, l_secondwon) |>
+                                    l_svperc, l_firstwon, l_secondwon, tour) |>
   rename(seed = loser_seed, ace = l_ace, df = l_df, svperc = l_svperc,
          firstwon = l_firstwon, secondwon = l_secondwon)
 
 df <- bind_rows(w_small, l_small) |>
   rename(player = "value")
 df
+## use df in renderDataTable and dataTableOutput
 ```
 
 ```{r}
@@ -69,10 +72,11 @@ var_choices <- names(df)[3:7]
 ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
+      radioButtons("tour_sel", label = "Choose a Tour",
+                   choices = df$tour |> unique()),
       selectInput("player_sel",
                   label = "Choose a Player",
-                  choices = player_choices,
-                  selected = "Frances Tiafoe"),
+                  choices = NULL),
       radioButtons("var_sel",
                    label = "Choose a Variable",
                    choices = var_choices),
@@ -80,13 +84,26 @@ ui <- fluidPage(
                   min = 5, max = 30, value = 15)
     ),
     mainPanel(
-      plotOutput("hist_plot")
+      plotOutput("hist_plot"),
+      dataTableOutput("raw_data")
     )
   )
   
 )
 
 server <- function(input, output, session) {
+  
+  ## first argument is either an input or a reactive data frame
+  ## when something in the first argument changes, the code
+  ## in { } is triggered to update
+  observeEvent(input$tour_sel, {
+    
+    player_choices <- df |> filter(tour == input$tour_sel) |>
+      distinct(player) |> pull(player)
+    
+    updateSelectInput(inputId = "player_sel",
+                      choices = player_choices)
+  })
   
   tennis_reactive <- reactive({
     df_oneplayer <- df |> filter(player == input$player_sel)
@@ -102,14 +119,55 @@ server <- function(input, output, session) {
                               input$player_sel)) +
       theme_minimal(base_size = 34)
   })
+  
+  output$raw_data <- renderDataTable({
+    df
+  })
     
-
-
-
   
 }
 
 shinyApp(ui, server)
+```
+
+Mastering Shiny Chapter 10 EX. 3.
+
+```{r}
+library(gapminder)
+continents <- unique(gapminder$continent) |>
+  fct_expand("All") |> levels()
+
+ui <- fluidPage(
+  selectInput("continent", "Continent", choices = continents), 
+  selectInput("country", "Country", choices = NULL),
+  tableOutput("data")
+)
+
+server <- function(input, output, session) {
+  
+  observeEvent(input$continent, {
+    
+    if (input$continent == "All") {
+      country_choices <- gapminder |>
+        distinct(country) |> pull(country)
+    } else {
+      country_choices <- gapminder |>
+        filter(continent == input$continent) |>
+        distinct(country) |> pull(country)
+    }
+    
+    
+    updateSelectInput(inputId = "country",
+                      choices = country_choices)
+  })
+  
+  output$data <- renderTable({
+    gapminder |> filter(country == input$country)
+  })
+}
+
+shinyApp(ui, server)
+
 ```
 
 Tidy Evaluation
@@ -145,4 +203,60 @@ sort_mtcars <- function(var_sort) {
   mtcars |> arrange(.data[[var_sort]])
 }
 sort_mtcars(var_sort = "mpg")
+```
+
+Action Buttons
+
+```{r}
+poke_df <- read_csv(here::here("data/pokemon_full.csv"))
+poke_long <- poke_df |> pivot_longer(4:9, values_to = "value", 
+                                      names_to = "stat")
+
+poke_small <- poke_long |>
+  filter(Name == "Bulbasaur" | Name == "Ivysaur")
+ggplot(data = poke_small, aes(x = stat, y = value)) +
+  geom_col(aes(fill = Name), position = "dodge") +
+  scale_fill_viridis_d()
+
+
+
+library(shiny)
+
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      selectizeInput("pokechoose1", label = "Choose Pokemon",
+                     choices = poke_df$Name, selected = "Bulbasaur",
+                     multiple = TRUE),
+      actionButton("run_app", label = "Update Stats")
+      ),
+    mainPanel(
+      plotOutput(outputId = "pokegraph")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  
+  ## eventReactive({}) is similar to observeEvent,
+  ## but creates a reactive object
+  
+  poke_react <- eventReactive(input$run_app, {
+     poke_long |> filter(Name %in% input$pokechoose1) 
+  })
+  
+  output$pokegraph <- renderPlot({
+    
+    ggplot(data = poke_react(),
+           aes(x = value, y = stat)) +
+      geom_col(aes(fill = Name),
+               position = position_dodge2(reverse = TRUE)) +
+      scale_fill_viridis_d() +
+      theme_minimal(base_size = 34)
+    
+  })
+  
+}
+
+shinyApp(ui, server)
 ```
