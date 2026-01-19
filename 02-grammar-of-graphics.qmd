@@ -1,0 +1,94 @@
+---
+title: "Untitled"
+format: html
+---
+
+## Section 2.2: Grammar of Graphics
+
+* DATA: data frame to plot
+* AESTHETICS: mapping variables to pieces of the plot
+* GEOM: type of plot we want to make
+
+```{r}
+library(palmerpenguins)
+library(tidyverse)
+theme_set(theme_minimal())
+penguins
+```
+
+STAT
+
+```{r}
+ggplot(data = penguins, aes(x = species)) +
+  geom_bar(stat = "count") ## don't need stat = "count" because it's the default.
+
+penguins_summed <- penguins |> group_by(species) |>
+  summarise(n_species = n())
+
+ggplot(data = penguins_summed, aes(x = species,
+                                   y = n_species)) +
+  geom_bar(stat = "identity")
+## this is what geom_col does: it's geom_bar()
+## with a stat = "identify" statistical transformation
+``` 
+
+POSITION
+
+```{r}
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "stack") + ## don't need "stack" because it's default
+  scale_fill_viridis_d()
+
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "dodge") + ## don't need "stack" because it's default
+  scale_fill_viridis_d()
+```
+
+COORDINATE FUNCTION
+
+controlled with coord_xxxxx() (coord_cartesian() is the default).
+
+Exercise 1.
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point(stat = "identity", position = "identity") +
+  facet_null() +
+  coord_cartesian()
+```
+
+Your Turn 6.
+
+```{r}
+library(tidyverse)
+df <- read_csv("https://raw.githubusercontent.com/highamm/ds234_quarto/main/data_online/slu_graduates.csv") 
+
+## fixes error in the data
+df <- df |> mutate(across(everything(),
+                          .fns = ~replace(., . ==  "STATS" , "STAT")))
+
+## turns the data set from 1 row per graduating student
+## to 1 row per major-minor combination so that students
+## with more than one major-minor combo take up multiple
+## rows
+df_major_minor <- df |> filter(!is.na(minor1)) |> 
+  pivot_longer(starts_with("major"), names_to = "major_number",
+               values_to = "major") |>
+  filter(!is.na(major)) |>
+  pivot_longer(starts_with("minor"), names_to = "minor_number",
+               values_to = "minor") |>
+  filter(!is.na(minor))
+
+major_minor_15 <- df_major_minor |> group_by(major, minor) |>
+  summarise(n_total = n()) |>
+  ungroup() |>
+  arrange(desc(n_total)) |>
+  slice(1:15) |>
+  unite("major_minor", c(major, minor), sep = "-") |>
+  mutate(major_minor = fct_reorder(major_minor, n_total))
+
+ggplot(data = major_minor_15, aes(x = n_total, y = major_minor)) +
+  geom_bar(stat = "identity", position = "identity") +
+  coord_cartesian() +
+  facet_null()
+```
