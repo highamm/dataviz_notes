@@ -1,0 +1,64 @@
+---
+title: "Untitled"
+format: html
+---
+
+## Section 3.2
+
+Examples 1 through 5.
+
+Example 1. Second graph: there is a "stable baseline" in the line plot so that it's easier to see growth/decline for each species through time. With the bar plot, it's only the gentoo that has the stable baseline.
+
+Example 2. We prefer the first plot for the bar plot: bar plots and lollipop plots should always start at 0! Bar plots and lollipop plots encode area and length, so they must start at 0 for people to perceive them correctly. 
+
+Example 3. We prefer the first plot: it gives us a more zoomed in comparison. Scatterplots and boxplots do not need to start at 0 since they do not encode length or area. 
+
+Example 4. Pair 1. we prefer the colour plot because we can more directly compare the positions of the points representing penguins at each of the three levels of species. 
+
+
+Pair 2. We prefer the faceted plot.
+
+In general, the more levels there are of your categorical variable, the more useful it is to facet (because people generally have more trouble perceiving > 7 colours).  Moreover, colour is usually more useful when there is clear clustering in the levels.
+
+Example 5. bar plot is better: people have an easier time perceiving differences in position (in a bar plot) than they do angle (as in a pie chart).
+
+
+```{r}
+hpi_df <- read_csv("https://raw.githubusercontent.com/highamm/ds234_quarto/main/data_online/hpi-tidy.csv")
+hpi_df
+table(hpi_df$Region)
+
+hpi_means <- hpi_df |> group_by(Region) |>
+  summarise(mean_hpi = mean(HappyPlanetIndex))
+  
+  
+ggplot(data = hpi_df, aes(x = Region, y = HappyPlanetIndex)) +
+  geom_jitter(width = 0.1) +
+  theme_minimal() +
+  coord_flip() +
+  geom_point(data = hpi_means, aes(y = mean_hpi),
+             shape = 8, colour = "hotpink", size = 3) +
+  labs(caption = "The asterisks mark the mean happy planet index.")
+
+## bar plot of the top 10 ten countires
+## showing the region for each country in the plot
+
+hpi_top10 <- hpi_df |>
+  arrange(desc(HappyPlanetIndex)) |>
+  slice(1:10) |>
+  mutate(Country = fct_reorder(Country, HappyPlanetIndex))
+
+ggplot(data = hpi_top10, aes(x = HappyPlanetIndex, y = Country,
+                             fill = Region)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d()
+
+## a map would be even better! See Section 6.
+```
+
+
+
+
+
+
+

@@ -92,3 +92,52 @@ ggplot(data = major_minor_15, aes(x = n_total, y = major_minor)) +
   coord_cartesian() +
   facet_null()
 ```
+
+## Section 2.3: Your Turn
+
+Exercises 1 through 4.
+
+Exercise 3.
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly(colour = "skyblue")
+
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly(aes(colour = species))
+```
+
+Exercise 4.
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point(aes(colour = species)) +
+  geom_smooth()
+
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(aes(colour = species))
+```
+
+Exercise 5.
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth()
+
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~ species)
+
+
+
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth()
+
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
