@@ -1,0 +1,62 @@
+---
+title: "Untitled"
+format: html
+---
+
+## Section 5.1
+
+## Section 5.3 Exercise 2.
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(here)
+df <- read_excel(here::here("data/slu_graduates_17_25.xlsx"))
+
+## one row per student
+df
+
+## fixes error in the data
+df <- df |> mutate(across(everything(),
+                          .fns = ~replace(., . ==  "STATS" , "STAT")))
+
+majors_long <- df |> select(-starts_with("minor")) |>
+  pivot_longer(starts_with("major"), names_to = "major_num",
+               values_to = "major") |>
+  filter(!is.na(major))
+
+## double majors now are in two rows
+majors_long
+```
+
+Make a lollipop plot of the proportion of students who are recorded as Male for each major.
+
+Hint: create an indicator variable for sex (1 for male, 0 for female) and recall from 234 that the mean() of an indicator variable gives the proportion of 1's.
+
+```{r}
+majors_prop <- majors_long |> mutate(sex_ind = if_else(sex == "M",
+                                        true = 1,
+                                        false = 0)) |>
+  group_by(major) |>
+  summarise(prop_male = mean(sex_ind),
+            n_students = n()) |>
+  filter(n_students >= 45) |>
+  mutate(major = fct_reorder(major, prop_male)) |>
+  mutate(mcssds_var = if_else(major %in% c("MATH", "STAT", "CS", "EC_MA"),
+                              true = "mcss",
+                              false = "other"))
+
+ggplot(data = majors_prop, aes(x = prop_male, y = major,
+                               colour = mcssds_var, size = mcssds_var)) +
+  geom_segment(aes(yend = major, x = 0, xend = prop_male),
+               show.legend = FALSE) +
+  geom_point(show.legend = FALSE) +
+  theme_minimal() +
+  scale_colour_manual(values = c("hotpink", "grey60")) +
+  scale_size_manual(values = c(2, 1))
+## scale_colour_manual()
+
+## this is busy with all, but maybe we want to only plot majors 
+## that have at least 45 students (avg. 5 per year).
+
+```

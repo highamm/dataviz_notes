@@ -57,6 +57,47 @@ ggplot(data = hpi_top10, aes(x = HappyPlanetIndex, y = Country,
 ```
 
 
+Example 7. qualitative there is no ordering to the species that makes sense for sequential or diverging.
+
+scale_colour_brewer() is for colouring by a categorical variable (<chr> or <fct>)
+scale_colour_distiller() is for colouring by a numeric variable.
+
+## Your Turn
+
+Exercise 1.
+
+a. sequential (paler colour for low cases, vibrant colour for high cases).
+
+b. diverging (paler colour for no change).
+
+c. qualitative (two categories).
+
+d. diverging (paler colour for 0).
+
+Exercise 2.
+
+```{r}
+library(palmerpenguins)
+library(tidyverse)
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm,
+                            colour = body_mass_g)) +
+  geom_point() +
+  scale_colour_viridis_b()
+## _d() is only used to colour or fill by categorical variables
+## _c() uses colour for a quantitative variable
+## _b() bins the continuous variable and then colours by
+## a set number of categorical bins
+```
+
+Exercise 3.
+
+```{r}
+ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing, colour = Region)) +
+  geom_point() +
+  theme(plot.background = element_rect("red"),
+        panel.grid.major = element_line("orange"),
+        legend.title = element_text(face = "bold"))
+```
 
 
 
