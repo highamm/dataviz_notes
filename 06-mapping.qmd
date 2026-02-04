@@ -65,4 +65,69 @@ ggplot(data = full_df) +
   geom_sf_text(aes(label = active_cases))
 ```
 
+2020 Election Example:
+
+```{r}
+load(here::here("data/election_2020.rda"))
+election_2020
+
+ggplot(data = election_2020) +
+  geom_sf(aes(fill = per_gop)) +
+  theme_void() +
+  scale_fill_distiller(type = "seq", palette = "Reds",
+                       direction = 1)
+```
+
+
+```{r}
+load(here::here("data/ozone.rda"))
+ozone
+
+ggplot(data = ozone, aes(x = lon, y = lat)) +
+  geom_point(aes(colour = ozone)) +
+  coord_fixed() +
+  theme_void() +
+  scale_colour_viridis_c()
+## tigris can be used to plot state boundaries
+
+## comparing average ozone measurements from the two sources would be harder to see with a map (easier to see with boxplots or faceted histogram)
+```
+
+```{r}
+baseball_soto <- read_csv("data/baseball_soto25.csv") |>
+  relocate(plate_x, plate_z, type, pitch_type)
+baseball_soto
+
+ggplot(data = baseball_soto, aes(x = plate_x, y = plate_z)) +
+  geom_point(aes(colour = type)) +
+  scale_colour_viridis_d() +
+  theme_minimal() +
+  geom_vline(xintercept = -0.83333, linetype = "dashed") +
+  geom_vline(xintercept = 0.833333, linetype = "dashed") +
+  facet_wrap(~ pitch_type) +
+  coord_fixed()
+## can also do geom_hline() for other pieces
+```
+
+## Section 6.4
+
+```{r}
+library(tidyverse)
+library(here)
+hpi_df <- read_csv(here("data/hpi-tidy.csv")) |>
+  mutate(Country = if_else(Country == "United States of America",
+                           true = "USA",
+                           false = Country))
+
+world_map <- map_data("world")
+
+world_joined <- left_join(world_map, hpi_df, join_by(region == Country))
+
+ggplot(data = world_joined, aes(x = long, y = lat,
+                             group = group)) +
+  geom_polygon(aes(fill = Footprint)) +
+  coord_map(projection = "gilbert") +
+  scale_fill_viridis_c() +
+  xlim(c(-180, 180))
+``` 
 
