@@ -1,0 +1,80 @@
+---
+title: "Section 7: Uncertainty"
+author: "Your Name"
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(here)
+library(tidyverse)
+statsurvey_df <- read_csv(here("data/stat113_survey.csv"))
+
+## Step 1: create a variable for academic year
+## fix the variable type for time_year
+## if the semester is spring, make time_year the year prior
+
+statsurvey_clean <- statsurvey_df |> mutate(time_year = as.numeric(time_year)) |>
+  mutate(academic_year = if_else(time_semester == "S",
+                                 true = time_year - 1,
+                                 false = time_year)) |>
+  relocate(academic_year) |>
+  mutate(academic_year = academic_year + 2000)
+## Step 2: compute mean gpa and SE for each academic year
+## add and subtract SE from each mean to get bounds
+
+statsurvey_sum <- statsurvey_clean |> filter(!is.na(GPA)) |>
+  group_by(academic_year) |>
+  summarise(mean_gpa = mean(GPA),
+            se = sd(GPA) / sqrt(n())) |>
+  mutate(se_lb = mean_gpa - se,
+         se_ub = mean_gpa + se)
+  
+## Step 3: make plot with geom_errorbar() and geom_point()
+ggplot(data = statsurvey_sum, aes(x = academic_year, y = mean_gpa)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = se_lb, ymax = se_ub)) +
+  theme_minimal() +
+  labs(x = "Academic Year", y = "GPA",
+       caption = "Data is from a convenience sample of STAT 113 students in each year.",
+       title = "Grade Inflation at SLU!")
+```
+
+Section 7.3
+
+
+```{r}
+statsurvey_clean <- statsurvey_df |> mutate(time_year = as.numeric(time_year)) |>
+  mutate(academic_year = if_else(time_semester == "S",
+                                 true = time_year - 1,
+                                 false = time_year)) |>
+  relocate(academic_year) |>
+  mutate(academic_year = academic_year + 2000)
+
+statsurvey_clean |>
+  group_by(Tattoo) |>
+  summarise(n = n())
+
+statsurvey_tattoo <- statsurvey_clean |>
+  mutate(tattoo_ind = if_else(Tattoo == "Yes" | Tattoo == "yes",
+                              true = 1,
+                              false = 0)) |>
+  relocate(tattoo_ind) |>
+  filter(!is.na(Tattoo)) |> ## assume that NAs are really missing
+  group_by(academic_year) |>
+  summarise(prop_tattoo = mean(tattoo_ind),
+            se = sqrt(prop_tattoo * (1 - prop_tattoo) / n())) |>
+  mutate(se_lb = prop_tattoo - se,
+         se_ub = prop_tattoo + se)
+
+ggplot(data = statsurvey_tattoo, aes(x = academic_year, y = prop_tattoo)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = se_lb, ymax = se_ub)) +
+  theme_minimal() +
+  labs(x = "Academic Year", y = "Proportion who have a Tattoo",
+       caption = "Data is from a convenience sample of STAT 113 students in each year.",
+       title = "Tattoo Prevalence SLU!")
+```
+
+
