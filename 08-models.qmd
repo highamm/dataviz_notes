@@ -1,0 +1,38 @@
+---
+title: "Section 8: Models"
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(here)
+library(tidyverse)
+statsurvey_df <- read_csv(here("data/stat113_survey.csv"))
+
+## Step 1: create a variable for academic year
+## fix the variable type for time_year
+## if the semester is spring, make time_year the year prior
+
+statsurvey_clean <- statsurvey_df |> mutate(time_year = as.numeric(time_year)) |>
+  mutate(academic_year = if_else(time_semester == "S",
+                                 true = time_year - 1,
+                                 false = time_year)) |>
+  relocate(academic_year) |>
+  mutate(academic_year = academic_year + 2000)
+statsurvey_clean
+
+gpa_mod <- lm(GPA ~ academic_year, data = statsurvey_clean)
+
+library(broom)
+gpa_mod |> tidy()
+
+statsurvey_clean <- statsurvey_clean |> mutate(academic_year_fct = factor(academic_year))
+
+gpa_mod_fct <- lm(GPA ~ academic_year_fct, data = statsurvey_clean)
+gpa_mod_fct |> tidy() |> print(n = Inf)
+
+gpa_mod |> glance()
+gpa_mod_fct |> glance()
+```
+

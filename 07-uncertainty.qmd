@@ -1,6 +1,5 @@
 ---
 title: "Section 7: Uncertainty"
-author: "Your Name"
 format: 
   html:
     embed-resources: true
