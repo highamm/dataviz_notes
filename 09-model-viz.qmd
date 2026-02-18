@@ -1,0 +1,64 @@
+---
+title: "Untitled"
+format: html
+---
+
+## Section 9.2
+
+```{r}
+library(openintro)
+library(tidyverse)
+library(ggeffects)
+theme_set(theme_minimal())
+evals <- openintro::evals
+```
+
+```{r}
+library(broom)
+mod_comp <- lm(score ~ age + bty_avg + age:bty_avg + gender,
+               data = evals)
+mod_comp |> tidy()
+```
+
+```{r}
+pred_comp <- ggpredict(mod_comp, terms = c("bty_avg",
+                              "age [threenum]",
+                              "gender")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble()
+
+## notes on ggpredict
+## ggpredict assumes that the first variable given in terms
+## is the one that will go on the x-axis (by default, use 15 
+## unique value for that first variable)
+
+## age is quantitative, but, since bty_avg is already on the x-axis,
+## wqe need to choose a few unique values for age to colour or facet by
+## options: age [threenum] gives the Q1, median, and Q3 of age are the values used the grid
+## age [fivenum] is the threenum plus the min and max age are used
+## age [meansd] is the mean age and one sd above and below age
+## age [c(35, 45, 55, 65, 75)] is how you choose specific values
+
+## gender: by default, ggpredict() incorporates all levels of a
+## categorical predictor into the grid
+```
+
+```{r}
+ggplot(data = pred_comp, aes(x = bty_avg, y = predicted)) +
+  geom_point(data = evals, aes(x = bty_avg, y = score), alpha = 0.3) +
+  geom_line(aes(colour = age), linewidth = 1.5) +
+  facet_wrap(~ gender) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = age),
+              alpha = 0.15) +
+
+  scale_colour_viridis_d() +
+  scale_fill_viridis_d()
+```
+
+
+Your Turn
+
+Exercise 1.
+
+
+
