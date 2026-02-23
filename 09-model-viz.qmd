@@ -60,5 +60,133 @@ Your Turn
 
 Exercise 1.
 
+```{r}
+evals
+
+mod_interact <- lm(score ~ rank + gender + age + gender:age, data = evals)
+mod_interact |> tidy()
+
+pred_interact <- ggpredict(mod_interact, terms = c("age",
+                              "rank",
+                              "gender")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble()
+
+
+ggplot(data = pred_interact, aes(x = age, y = predicted)) +
+  geom_line(aes(colour = gender), linewidth = 1.5) +
+  facet_wrap(~ rank) +
+  scale_colour_viridis_d(option = "D") +
+  geom_point(data = evals, aes(y = score, colour = gender), alpha = 0.2)
+```
+
+Exercise 2.
+
+```{r}
+mod_nointeract <- lm(score ~ rank + gender + age, data = evals)
+mod_nointeract |> tidy()
+
+mod_nointeract |> glance()
+mod_interact |> glance() ## better model according to AIC, BIC
+
+pred_nointeract <- ggpredict(mod_nointeract, terms = c("age",
+                              "rank",
+                              "gender")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble()
+
+plot_df <- bind_rows(lst(pred_interact, pred_nointeract), .id = "model")
+plot_df
+
+ggplot(data = plot_df, aes(x = age, y = predicted)) +
+  geom_line(aes(colour = gender), linewidth = 1.5) +
+  facet_grid(rank ~ model) +
+  scale_colour_viridis_d() +
+  geom_point(data = evals, aes(y = score, colour = gender), alpha = 0.1)
+```
+
+Exercise 3.
+
+When there are more than 3-4 predictors, we cannot visualize all of them on a single plot! We need to choose the 3/4 that we care the most about and fix the other predictors at a single value.
+
+```{r}
+## most interested in distance, square footage, and zip
+
+## the other predictors are fixed at their mean or their median
+## mean(df$var, na.rm = TRUE) gets the mean of a variable
+
+## in ggpredict, Bike [50] will use the value 50 for the bike variable
+
+library(Stat2Data)
+data("RailsTrails")
+rails_trails <- RailsTrails |> as_tibble() |>
+  mutate(Zip = factor(Zip))
+rails_trails
+
+rails_mod <- lm(Price2014 ~ Distance + GarageSpaces + NumRooms + BikeScore +
+     SquareFeet + Zip, data = rails_trails)
+rails_mod |> tidy()
+
+rails_trails |> summarise(median_bike = median(BikeScore),
+                          median_g = median(GarageSpaces),
+                          median_rooms = median(NumRooms))
+
+ggpredict(rails_mod, terms = c("Distance", "SquareFeet [threenum]",
+                               "Zip", "BikeScore [54.5]",
+                               "GarageSpaces [1]",
+                               "NumRooms [6.5]")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble()
+
+rails_pred <- ggpredict(rails_mod, terms = c("Distance", "SquareFeet [threenum]",
+                               "Zip")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble()
+## ggpredict() automaticall fixes any quantitative predictor not specified
+## at its median
+
+ggplot(data = rails_pred, aes(x = Distance, y = predicted)) +
+  geom_line(aes(colour = SquareFeet), linewidth = 1.5) +
+  facet_wrap(~Zip) +
+  geom_point(data = rails_trails, aes(y = Price2014), 
+             alpha = 0.2)
+
+```
+
+```{r}
+library(faraway)
+library(broom)
+library(GGally)
+
+ggpairs(fat, columns = c("brozek", "weight", "thigh", "adipos"))
+## lots of multicollinearity: the three predictors (weight, thigh,
+## adipos are all highly correlated).
+
+## b
+mod <- lm(brozek ~ weight + thigh + adipos, data = fat)
+mod |> tidy()
+## two of the estimated slopes are negative but 
+## there is a strong positive relationship between each predictor and
+## brozek in the pairs plot.
+```
+
+```{r}
+fat_preds <- ggpredict(mod, terms = c("weight")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble()
+
+ggplot(data = fat_preds, aes(x = weight, y = predicted)) +
+  geom_line(linewidth = 1.7, colour = "blue") +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+              fill = "lightblue", alpha = 0.3) +
+  theme_minimal() +
+  geom_point(data = fat, aes(y = brozek), alpha = 0.7)
+## the line from ggpredict does not at all match the 
+## trend of the data because of the high degree of multicollinearity.
+```
+
+
+
+
 
 
