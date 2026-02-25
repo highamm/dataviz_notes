@@ -1,0 +1,48 @@
+---
+title: "Section 10: Logistic Visualization"
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(broom)
+theme_set(theme_minimal())
+
+titanic_df <- read_csv(here("data/titanic.csv"),
+                       col_types = list(Pclass = col_factor())) |>
+  mutate(Pclass = fct_recode(Pclass,
+                             "1st" = "1",
+                             "2nd" = "2",
+                             "3rd" = "3"))
+titanic_df
+```
+
+Warm-up: geom_rug
+
+```{r}
+titanic_mod <- glm(Survived ~ Age,
+                   data = titanic_df, family = "binomial")
+titanic_mod |> tidy()
+
+## option 1
+ggplot(data = titanic_df, aes(x = Age, y = Survived)) +
+  geom_jitter(height = 0.05, alpha = 0.4) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial")) +
+  theme_minimal()
+
+## option 2
+ggplot(data = titanic_df, aes(x = Age, y = Survived)) +
+  geom_rug(data = titanic_df |> filter(Survived == 1),
+           sides = "t", alpha = 0.4) +
+  geom_rug(data = titanic_df |> filter(Survived == 0),
+           sides = "b", alpha = 0.4) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial")) +
+  theme_minimal()
+
+## in general, the more data, the better the jitter plot (since the rug ticks can overlap quickly)
+```
+
+
