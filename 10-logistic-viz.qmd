@@ -45,4 +45,74 @@ ggplot(data = titanic_df, aes(x = Age, y = Survived)) +
 ## in general, the more data, the better the jitter plot (since the rug ticks can overlap quickly)
 ```
 
+```{r}
+titanic_large <- glm(Survived ~ Age + Sex + Pclass, data = titanic_df,
+                     family = "binomial")
+titanic_large |> tidy()
+
+library(ggeffects)
+ggpredict(titanic_large, terms = c("Age", "Sex", "Pclass"))
+
+preds_titanic_large <- ggpredict(titanic_large, terms = c("Age", "Sex", "Pclass")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble() |>
+  mutate(Pclass = fct_relevel(Pclass, c("1st", "2nd", "3rd")))
+
+ggplot(data = preds_titanic_large, aes(x = Age, y = predicted)) +
+  geom_line(aes(colour = Sex), linewidth = 1.5) +
+  facet_wrap(~Pclass) +
+  scale_colour_viridis_d() +
+  geom_jitter(data = titanic_df, aes(y = Survived, colour = Sex), 
+              width = 0, height = 0.04) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Sex),
+              alpha = 0.2) +
+  scale_fill_viridis_d()
+```
+
+Your Turn
+
+```{r}
+titanic_interaction <- glm(Survived ~ Age + Sex + Pclass + Sex:Pclass,
+                           data = titanic_df,
+                     family = "binomial")
+titanic_interaction |> tidy()
+
+preds_titanic_interaction <- ggpredict(titanic_interaction, terms = c("Age", "Sex", "Pclass")) |>
+  as.data.frame(terms_to_colnames = TRUE) |>
+  as_tibble() |>
+  mutate(Pclass = fct_relevel(Pclass, c("1st", "2nd", "3rd")))
+
+plot_df <- bind_rows(lst(preds_titanic_large, preds_titanic_interaction), .id = "model") |>
+  mutate(model = fct_recode(model, interaction = "preds_titanic_interaction",
+                            no_interaction = "preds_titanic_large"))
+ggplot(data = plot_df, aes(x = Age, y = predicted)) +
+  geom_line(aes(colour = Sex, linetype = model)) +
+  facet_wrap(~ Pclass) +
+  theme_minimal() +
+  scale_colour_viridis_d() +
+  geom_rug(data = titanic_df |> filter(Survived == "1"),
+           aes(colour = Sex, y = Survived), sides = "t") + 
+  geom_rug(data = titanic_df |> filter(Survived == "0"),
+           aes(colour = Sex, y = Survived), sides = "b")
+
+## the interaction allows the association between sex and survival to be different
+## for different classes (e.g., in 2nd class, there is a much larger difference between the sexes than there is in 3rd class).
+
+ggplot(data = plot_df, aes(x = Age, y = predicted)) +
+  geom_line(aes(colour = Sex)) +
+  facet_grid(model ~ Pclass) +
+  theme_minimal() +
+  scale_colour_viridis_d() +
+  geom_rug(data = titanic_df |> filter(Survived == "1"),
+           aes(colour = Sex, y = Survived), sides = "t") + 
+  geom_rug(data = titanic_df |> filter(Survived == "0"),
+           aes(colour = Sex, y = Survived), sides = "b") 
+
+## exercise 4.
+library(broom)
+titanic_large |> glance()
+titanic_interaction |> glance() ## better model: lower AIC and BIC
+```
+
+
 
