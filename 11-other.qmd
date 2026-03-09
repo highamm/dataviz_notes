@@ -1,0 +1,146 @@
+---
+title: "Untitled"
+format: html
+---
+
+## Section 11.2: Large Data
+
+```{r}
+library(tidyverse)
+diamonds |> nrow()
+
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point()
+
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_hex() +
+  scale_fill_viridis_c() +
+  theme_minimal()
+## can now see that most of the diamonds in this data set
+## are low carat and low price (denser region of the hex plot).
+```
+
+Really large n (10,000,000 rows)
+
+```{r}
+library(tidyverse)
+n <- 10000000
+x <- rnorm(n, 0, 1)
+y <- x * rgamma(n, 3, 2)
+df <- tibble(x = x, y = y)
+df
+
+##ggplot(data = df, aes(x = x, y = y)) +
+##  geom_point()
+## above will cause R to crash
+
+## slice_sample randomly chooses 10000 rows to keep
+df_small <- df |> slice_sample(n = 10000)
+ggplot(data = df_small, aes(x = x, y = y)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth()
+## visualizing a small subset of a very large data set.
+
+## potential downside: missing extreme outliers or data entry errors.
+```
+
+Large p:
+
+```{r}
+## install.packages("openintro")
+library(openintro)
+mlb_small <- mlb_players_18 |> filter(games > 50 & position != "P")
+mlb_small
+
+library(GGally)
+ggpairs(data = mlb_small, columns = 6:11)
+## limited to like maybe 6 variables.
+
+## more predictors
+ggcorr(data = mlb_small |> dplyr::select(4:ncol(mlb_small)))
+## cannot see outliers
+## another disadvantage: see Your Turns 1-3. 
+```
+
+## Section 11.3: Stat Learning (Skip)
+
+## Section 11.4: Network Visualization
+
+Wednesday
+
+
+Your Turn 1-3.
+
+```{r}
+set.seed(1414111)
+x1 <- rnorm(100, 0, 1)
+x2 <- seq(-1, 1, length.out = 100)
+y <- 4 + 0 * x1 + 1 * x2^2 + rnorm(100, 0, 0.1)
+df <- tibble(x1 = x1, x2 = x2, y = y)
+ggcorr(data = df)
+
+## it looks like there isn't a strong relationship between
+## x1 and y or between x2 and y
+```
+
+```{r}
+ggplot(data = df, aes(x = x1, y = y)) +
+  geom_point()
+ggplot(data = df, aes(x = x2, y = y)) +
+  geom_point() 
+## it looks like x2 and y actually have a very strong
+## relationship.
+
+## your turn 3
+## the ggcorr plot will only detect linear associations-
+## this is the major disadvantage of using this plot over
+## ggpairs()
+```
+
+Exercise 4.
+
+
+```{r}
+library(gapminder)
+gapminder_df <- gapminder |> filter(year == 2002 | year == 2007)
+gapminder_df <- gapminder_df|> mutate(year = factor(year))
+
+## a
+ggplot(data = gapminder_df, aes(x = year, y = lifeExp)) +
+  geom_boxplot()
+## this is flawed because the graph is ignoring how
+## the countries are paired (we have dependent data and
+## we need to show that dependence!)
+
+## b.
+gapminder_wide <- gapminder_df |> pivot_wider(id_cols = country, 
+                            names_from = "year",
+                            values_from = "lifeExp") |>
+  mutate(diff = `2007` - `2002`)
+
+ggplot(gapminder_wide, aes(x = diff)) +
+  geom_histogram(colour = "skyblue4", fill = "skyblue1",
+                 bins = 15)
+## most countries had a positive change between 2002 and
+## 2007, but I've lost the actual scale of life expectancies
+
+## c
+gapminder_df <- gapminder_df |> group_by(country) |>
+  mutate(diff = diff(lifeExp)) |>
+  ungroup() |>
+  mutate(change = if_else(diff > 0, 
+                          true = "inc",
+                          false = "dec"))
+
+ggplot(data = gapminder_df, aes(x = year, y = lifeExp)) +
+  geom_line(aes(group = country, colour = change), alpha = 0.3) +
+  theme_minimal() +
+  scale_colour_manual(values = c("#DC3220",
+                                 "#005AB5"))
+## good for relatively small samples, but if we had 10000 pairs,
+## this would be a mess (and would need to do the histogram of differences)
+```
+
+
+
+
