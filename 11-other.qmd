@@ -66,7 +66,142 @@ ggcorr(data = mlb_small |> dplyr::select(4:ncol(mlb_small)))
 
 ## Section 11.4: Network Visualization
 
-Wednesday
+Exercise 1a. Nodes are majors. Edges will correspond to the number of double majors (thicker if there are a lot of double majors and less thick if there are only a few double majors).
+
+Exercise 1b.
+
+a. You are interested in examining how the number of students double majoring at SLU has changed through time.
+
+no: line plot of number of double majors vs. time.
+
+b. You are interested in exploring what other fields statistics majors at SLU major or minor in most often.
+
+network graph could work, but a lollipop plot or bar plot would be more appropriate.
+
+c. You obtain data on all seniors at SLU with an instagram account and want to explore the instagram relationships between different members of the class.
+
+yes.
+
+d. You obtain data on all seniors at SLU with an instagram account and want to explore if there is an association between number of instagram “followers” and GPA.
+
+no: just a scatterplot would work great!
+
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(here)
+df <- read_excel(here::here("data/slu_graduates_17_25.xlsx"))
+
+## fixes error in the data
+df <- df |> mutate(across(everything(),
+                          .fns = ~replace(., . ==  "STATS" , "STAT")))
+
+majors_long <- df |> filter(!is.na(major3) | !is.na(major2)) |>
+  pivot_longer(c(major1, major2, major3),
+               names_to = "major_num",
+               values_to = "major") |>
+  filter(!is.na(major)) |>
+  dplyr::select(-minor1, -sex, -minor2, -minor3, -graduation_year)
+
+majors_long <- df |> filter(!is.na(major3) | !is.na(major2)) |>
+  pivot_longer(c(major1, major2, major3),
+               names_to = "major_num",
+               values_to = "major") |>
+  filter(!is.na(major)) |>
+  dplyr::select(-minor1, -sex, -minor2, -minor3, -graduation_year)
+
+majors_long
+
+network_df <- majors_long |>
+  group_by(adm_id) |>
+  reframe(test = t(combn(major, 2))) |>
+  mutate(vertex1 = test[ ,1],
+         vertex2 = test[ ,2]) |>
+  dplyr::select(-test)
+network_df
+```
+
+Exercise 3. If there are triple majors (e.g., HIST, STAT, MATH), we need a row for __each__ combination (HIST, STAT), (HIST, MATH) and (STAT, MATH) all on separate rows.
+
+```{r}
+
+network_sum <- network_df |> mutate(major_first = if_else(vertex1 > vertex2,
+                                           true = vertex2,
+                                           false = vertex1),
+                     major_second = if_else(vertex1 > vertex2,
+                                            true = vertex1,
+                                            false = vertex2)) |>
+  dplyr::select(-vertex1, -vertex2) |>
+  group_by(major_first, major_second) |>
+  summarise(n_majors = n()) |>
+  filter(n_majors >= 7)
+```
+
+Exercise 4. it's putting the majors in alphabetical order (e.g., always MATH, PHYS and never PHYS, MATH) so that they get counted up correctly in the summarise().
+
+Exercise 5. filter() ensures that there are not edges between majors that have had fewer than 5 double majors (which will make plot look cleaner).
+
+tidygraph wants two data sets:
+
+a data set that only has the unique nodes, created below, with unique id numbers for each node.
+equal to MCSS for MATH, CS, STAT, DATA, and EC_MA,
+equal to Science for BIOL, PSYC, and PHYS,
+equal to Social Science for ECON, EN_EC, EC_SP, SOC, ANTH, GOVT, and BUSLA
+equal to Arts and Humanities for all other majors (can use the .default argument to case_when() for this).
+```{r}
+nodes <- df |> filter(!is.na(major3) | !is.na(major2)) |>
+  pivot_longer(c(major1, major2, major3),
+               names_to = "major_num",
+               values_to = "major") |>
+  filter(!is.na(major)) |>
+  distinct(major) |> ## keep only one row for each unique major
+  rename(label = major) |>
+  ## only keep the majors that are found in network_sum
+  filter(label %in% c(network_sum |> pull(major_first),
+                      network_sum |> pull(major_second))) |>
+  rowid_to_column("id") |>
+  mutate(major_type = case_when(label %in% c("MATH", "STAT", "CS", "DATA",
+                                             "EC_MA") ~ "MCSS",
+                                label %in% c("BIOL", "PSYC", "PHYS") ~ "Science",
+                                label %in% c("ECON", "EN_EC", "EC_SP", "SOC", "ANTH", "GOVT", "BUSLA") ~ "Social Science",
+                                .default = "Arts and Humanities"))
+nodes
+```
+
+edges is a data set that has the ids for two vertices along with the variable that controls how thick the edges will be.
+
+```{r}
+edges <- left_join(network_sum, nodes, by = join_by(major_first == label)) |>
+  rename(from = "id") |>
+  left_join(nodes, by = join_by(major_second == label)) |>
+  rename(to = "id") |>
+  ungroup() |>
+  dplyr::select(to, from, n_majors)
+edges
+```
+
+```{r}
+network_obj <- tbl_graph(nodes = nodes, edges = edges, directed = FALSE)
+library(ggraph)
+
+ggraph(network_obj |> mutate(centrality = centrality_degree()),
+                            layout = "kk", maxiter = 500) +
+  geom_edge_link(aes(width = n_majors), alpha = 0.7, show.legend = FALSE) +
+  geom_node_point(aes(colour = major_type,
+                      size = centrality), show.legend = FALSE) +
+  scale_edge_width(range = c(0.5, 3)) +
+  geom_node_text(aes(label = label), repel = TRUE) +
+  scale_colour_viridis_d()
+```
+
+Exercises 8 through 9.
+
+centrality_degree sizes the nodes just according to how many edges each node has.
+
+
+
+
 
 
 Your Turn 1-3.
