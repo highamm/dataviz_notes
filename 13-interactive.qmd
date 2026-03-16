@@ -1,0 +1,116 @@
+---
+title: "Section 13: Interactive Visualization"
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(plotly)
+library(tidyverse)
+
+hpi_df <- read_csv(here::here("data/hpi-tidy.csv"))
+ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing)) +
+  geom_point() +
+  theme_minimal()
+
+plot1 <- ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing)) +
+  geom_point() +
+  theme_minimal()
+plot1
+
+ggplotly(plot1)
+## by default, the aesthetics used in the plot
+## provide the "hovering" information in ggplotly()
+
+plot1 <- ggplot(data = hpi_df, aes(x = Footprint, y = Wellbeing,
+                                   label = Country)) +
+  geom_point() +
+  theme_minimal()
+
+ggplotly(plot1, tooltip = "label")
+## tooltip controls which aesthetics provide the "hovering" information
+```
+
+Exercise 1.
+
+```{r}
+library(palmerpenguins)
+penguin_bar <- ggplot(data = penguins, aes(x = species)) +
+  geom_bar()
+ggplotly(penguin_bar)
+## this is generally not a good use for plotly: it is not adding
+## new information to the bar plot.
+```
+
+Exercise 2.
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(here)
+df <- read_excel(here::here("data/slu_graduates_17_25.xlsx"))
+
+## one row per student
+df
+
+## fixes error in the data
+df <- df |> mutate(across(everything(),
+                          .fns = ~replace(., . ==  "STATS" , "STAT")))
+
+majors_long <- df |> select(-starts_with("minor")) |>
+  pivot_longer(starts_with("major"), names_to = "major_num",
+               values_to = "major") |>
+  filter(!is.na(major))
+
+## double majors now are in two rows
+majors_long
+
+majors_prop <- majors_long |> mutate(sex_ind = if_else(sex == "M",
+                                        true = 1,
+                                        false = 0)) |>
+  group_by(major) |>
+  summarise(prop_male = mean(sex_ind),
+            n_students = n()) |>
+  filter(n_students >= 45) |>
+  mutate(major = fct_reorder(major, prop_male)) |>
+  mutate(mcssds_var = if_else(major %in% c("MATH", "STAT", "CS", "EC_MA"),
+                              true = "mcss",
+                              false = "other"))
+
+major_plot <- ggplot(data = majors_prop, aes(x = prop_male, y = major,
+                               colour = mcssds_var, size = mcssds_var,
+                               sampsize = n_students)) +
+  geom_segment(aes(yend = major, x = 0, xend = prop_male),
+               show.legend = FALSE) +
+  geom_point(show.legend = FALSE) +
+  theme_minimal() +
+  scale_colour_manual(values = c("hotpink", "grey60")) +
+  scale_size_manual(values = c(2, 1)) +
+  labs(x = "proportion of male students")
+ggplotly(major_plot, tooltip = "sampsize")
+```
+
+Exercise 3.
+
+```{r}
+plot_test <- ggplot(hpi_df, aes(x = Footprint, y = Wellbeing)) +
+  geom_point() +
+  geom_smooth() 
+
+
+
+
+ggplotly(plot_test) |>
+  style(hoverinfo = "none", traces = c(1, 2, 3)) ## remove hover info for all three traces
+## if hoverinfo = "none", then the hover information is removed for any
+## traces you provide. THe traces go in order of the geoms provided (in this example:,
+## 1: geom_point()
+## 2: line from geom_smooth()
+## 3: ribbon from geom_smooth()
+```
+
+Your Turn Exercise 1. Advantages: you can get more information on the plot (e.g., sample size on lollipop plot, name of countries on scatterplot). Can also draw people in and grab people's attention.
+
+Disadvantages: it can be distracting (especially with large data sets), limited to the medium (cannot print interactive graphics and they are harder to share, eg., cannot render to PDF or Word). Finally, data storytelling with interactive graphs is really really hard (often you need to assume your reader would interact with the graph in particular way, which they might do).
+

@@ -1,0 +1,40 @@
+---
+title: "Section 12: Ethics"
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(tidyverse)
+library(here)
+theme_set(theme_minimal())
+challenger_df <- read_csv(here("data/Challenger.csv"))
+```
+
+Exercise 2.
+
+```{r}
+library(broom)
+launch_mod <- glm(SuccessfulLaunch ~ Temperature, data = challenger_df,
+    family = "binomial")
+launch_mod |> tidy()
+```
+
+According to our model, for a one degree farenheit increase in temperature, the odds of a "successful launch" increase multiplicatively by 1.26 times.
+
+Exercise 3.
+
+```{r}
+ggplot(data = challenger_df, aes(x = Temperature,
+                                 y = SuccessfulLaunch)) +
+  geom_smooth(method = "glm",
+              method.args = list(family = "binomial")) +
+  geom_rug(data = challenger_df |> filter(SuccessfulLaunch == 1), sides = "t") + 
+   geom_rug(data = challenger_df |> filter(SuccessfulLaunch == 0), sides = "b") +
+  geom_vline(aes(xintercept = 31), linetype = "dashed")
+```
+
+Your Turn 1. Yes, this is a violation of ethics. Even if it was an accident, a couple of principles of data science ethics were violated (similar to if a medical professional made a egregious and negligent error in treating someone, they are still held liable).
+
+

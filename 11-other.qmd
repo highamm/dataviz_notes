@@ -1,6 +1,8 @@
 ---
-title: "Untitled"
-format: html
+title: "Section 11: Other Topics"
+format: 
+  html:
+    embed-resources: true
 ---
 
 ## Section 11.2: Large Data
