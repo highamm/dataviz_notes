@@ -1,0 +1,161 @@
+---
+title: "Tennis Closeread"
+format:
+  closeread-html:
+    embed-resources: true
+    cr-style:
+      narrative-background-color-overlay: darkslategrey
+      narrative-text-color-overlay: "#e2e2e2"
+---
+
+## Introduction and Installation
+
+This is an example of a `closeread` document. `closeread` is a `Quarto` extension that allows us to weave together narrative text and data visualizations in an interactive way. In general, `closeread` documents lend themselves to data storytelling because you can pair your story directly to various images and visualizations.
+
+To install closeread, run `quarto add qmd-lab/closeread` in your __Terminal__ window (Tools -> Terminal -> New Terminal) and type `Y` or `Yes` to any prompts. The `closeread-html` piece in the YAML header above tells `Quarto` to render this file as a closeread document. There is a lot of other information about `closeread` options at <https://closeread.dev/guide/>.
+
+### Example
+
+The example used below is part of an SYE completed a couple of years ago. For this project, Ben Moolman ('24) created a model for in-match win probabilities in tennis matches from prior information (who was expected to win prior to the start of the match) and match information (the probability of winning the match also updated based on what the current scoreline was). Tennis's (weird) scoring system allows for very large changes in momentum in short periods of time.
+
+All of this text is just like "usual" Quarto text: it appears just as it would if you were to render a normal `.qmd` file.
+
+If we want to really take advantage of `closeread`, we need to create what is called a "closeread section." We can do this by using a closeread section tag (`.cr-section`). `cr-section` must be called `cr-section`: you cannot give the `section` any other name.  The three `:::` open and then subsequently close a section.
+
+:::{.cr-section} 
+
+This is some test text.
+
+::: 
+
+We haven't really done anything with the section above. The real purpose of a section is so that we can use a `closeread` __sticky__ and a `closeread` __tag__. 
+
+- a `closeread` sticky is something that stays "stuck" while the user scrolls through text.
+- a `closeread` trigger is something placed in a section that will cause a sticky to appear. 
+- a `closeread` sticky is "stuck" on the page until you use another trigger or you close out the section and move on to a different section or to other text.
+- in the example below, the sticky is called `#cr-tennis_plot` (and this also gets opened with three `:::`) and the trigger is `@cr-tennis_plot`. These labels can be anything you would like, but they should match! And, ideally, the labels will make some intuitive sense (here, `tennis_plot` because we are using a plot of a tennis match as our sticky!).
+
+:::{.cr-section} 
+
+Carlos Alcaraz player Jannik Sinner in a quarterfinal match of the 2022 U.S. Open @cr-tennis_plot. I asked `Claude` to "Describe the 2022 U.S. Open Quarterfinal Match between Carlos Alcaraz and Jannik Sinner," and this is how `Claude` describes their match.
+
+"
+What a match to ask about — this is widely regarded as one of the greatest tennis matches of the modern era. Here's a full breakdown:
+2022 US Open Quarterfinal — Carlos Alcaraz def. Jannik Sinner
+Score: 6-3, 6-7(7), 6-7(0), 7-5, 6-3.
+
+
+Carlos Alcaraz and Jannik Sinner traded shots of the highest quality and countless momentum swings across five sterling sets for 5 hours and 15 minutes, until Alcaraz finally won the last point at 2:50 a.m. — the latest finish in US Open history. Alcaraz was 19 and Sinner was 21, with the Italian reaching his maiden US Open quarterfinal.
+
+
+After taking the first set, Alcaraz held five set points in the second — but Sinner saved them all. In the third, Alcaraz broke to lead 6-5 and served for the set — but Sinner broke to force a tiebreaker that he dominated. In the fourth, it was Sinner who served for the victory at 5-4, even coming within a point of winning — but Alcaraz broke there and pushed the match to a fifth set.
+
+Sinner later reflected on that match point: "My match point I still have it now a little bit in my mind, that I missed the backhand cross." ATP Tour
+In the fifth, Alcaraz hit a running backhand passing winner to earn a break for a 5-3 lead, putting his finger to his ear to rouse the crowd. He converted that chance and served it out. When the end arrived, Alcaraz dropped to his back, his chest heaving, and covered his face with his hand. 
+
+Even with thousands of empty seats at that late hour, there were enough fans remaining to make as much noise as a full house at times. Both players waved their rackets and motioned with their arms to encourage the crowd to get even louder. Coco Gauff, who had been knocked out of the tournament earlier that week, tweeted that she had an early morning flight but refused to sleep and miss the match.
+
+
+It felt like the moment in which Alcaraz and Sinner proved they were ready to reach the top of the sport — not just because it was a five-set late-night epic, but because the level from set one through the end of the fifth was described by commentators as "off the charts." 
+
+Alcaraz went on to win the tournament, claiming his first major title and becoming the youngest men's world No. 1 in the Open Era. Wikipedia Sinner, meanwhile, used the loss as fuel — and the two have since become the defining rivalry in men's tennis, sometimes dubbed "Sincaraz" by fans and media.
+"
+
+:::{#cr-tennis_plot}
+
+```{r}
+#| warning: false
+library(tidyverse)
+plot_alc_sin <- read_csv(here::here("sinner_alcaraz_usopen24.csv"),
+                         col_types = cols(set_number = col_factor()))
+
+fills <- c("#F57A5C", "#F5C25C", "#94E25B", "#69CEE0", "#A875CE")
+
+five_set_boundaries_alc_sin_small_prior <- plot_alc_sin |>
+  group_by(set_number) |>
+  summarize(xmin = min(pt_number) - 0.5,
+            xmax = max(pt_number) + 0.5) |>
+  filter(set_number == 1 | set_number == 2 | set_number == 3 | set_number == 4 | set_number == 5)
+
+ggplot(data = plot_alc_sin, aes(x = pt_number, y = probability)) +
+  geom_rect(data = five_set_boundaries_alc_sin_small_prior, aes(x = NULL, y = NULL, xmin = xmin, xmax = xmax,
+                                                                ymin = -Inf, ymax = Inf, fill = set_number), alpha = 0.2) +
+  geom_line(data = plot_alc_sin, aes(y = win_prob_px)) +
+  labs(x = "Point Number",
+       y = "Probability of Winning Match",
+       title = "Alcaraz vs Sinner US Open Quarterfinal 2022",
+       subtitle = "Probability of Alcaraz Winning Match",
+       caption = "Prior contains 'lead-up' tournaments to the 2022 USO and 2022 USO itself") +
+  coord_cartesian(ylim = c(0, 1),
+                  xlim = c(0, nrow(plot_alc_sin))) +
+  scale_fill_manual(values = fills[1:5]) +
+  theme_bw(base_size = 14)
+```
+
+
+:::
+
+::: 
+
+This is all well and good, but one of the really nice things that `closeread` allows us to do is __focus__ on particular parts of the match as the user scrolls through. This tactic is really useful both for data collected through "time" (like the data here) and data collected in "space" (where we can Zoom in on different locations in a map, for example). 
+
+In the example below, we use the same plot as our sticky (though I do give it a different tag label: `tennis_plot_focus`). But, this time, the narrative text focuses on particular points of the match that get zoomed in on. To achieve this, we use "focus effects," which you can read more about at <https://closeread.dev/guide/focus-effects.html>.
+
+
+:::{.cr-section} 
+
+@cr-tennis_plot_focus Carlos Alcaraz player Jannik Sinner in a quarterfinal match of the 2022 U.S. Open. Now, instead of having the plot "stuck" through some narrative text, we will Zoom in on different features of the plot using _panning_ and _scaling_ to focus in on particular aspects of the plot as we are telling out story.
+
+At the start of the match, Alcaraz was favoured to win [@cr-tennis_plot_focus]{pan-to="70%,70%" scale-by="2"}. At the time, he was the more highly ranked player, seeded third at the U.S. Open. Sinner was seeded eleventh, and Ben's prior model reflects this difference in ranking and seeding, giving Alcaraz an 80% win probability (to make this Zoom happen, `scale-by` was set to `"2"` to double the size of the graph and `pan-to` aws set to `"70%,70%` to cutoff some of the graph. You should adjust these in the `.qmd` file to see how the scaling and panning works! For the panning, try negative values too).
+
+Alcaraz remained in control for most of the first two sets [@cr-tennis_plot_focus]. However, with Sinner serving at 5-6, 0-40 in the second set, Sinner started a comeback, winning the next three points, the next game, and the subsequent tiebreak to take the second set.
+
+In the third set, Alcaraz broke Sinner's serve at 5-5 and subsequently had an opportunity to serve for the set at 6-5. [@cr-tennis_plot_focus]{pan-to="200px,300px" scale-by="2"} But Sinner was able to break Alcaraz back immediately. Both players then had set points in the tiebreak, but Sinner eventually won the tiebreak. 
+
+Having a 2 sets to 1 lead, Sinner was now favoured to win the match for the first time. [@cr-tennis_plot_focus] Though he had a lower initial win probability, being up 2 sets to 1 in a best-of-five match still made him the favourite at this point in the match.
+
+In set number four, Sinner has a match point up 5-4 on his own serve. This point corresponds to the lowest point in the graph, where Alcaraz has less than a 10% probability of winning the match, according to the model and the current score. [@cr-tennis_plot_focus]{pan-to="-200px,-300px" scale-by="2"} Alcaraz wins this point to keep the match going, then breaks Sinner's serve, and eventually wins the fourth set to force a 5th-winner-take-all deciding set.
+
+In the final set, [@cr-tennis_plot_focus] Sinner breaks Alcaraz's serve first to go up 3-2. But Alcaraz immediately breaks back and eventually breaks Sinner's serve again to win the match. 
+
+If I had more time with this example, I would add in some text labels to the plot for the different Zooms (so I would have to have multiple stickies with these different labels). The text labels would have the rounded probability of Alcaraz winning the match at various points. The reason I would want to do this is that the y-axis gets cut-off when doing Zooming, and it would be nice for the approximate probability to still be on the graph.
+
+:::{#cr-tennis_plot_focus}
+
+```{r}
+#| warning: false
+library(tidyverse)
+plot_alc_sin <- read_csv(here::here("sinner_alcaraz_usopen24.csv"),
+                         col_types = cols(set_number = col_factor()))
+
+fills <- c("#F57A5C", "#F5C25C", "#94E25B", "#69CEE0", "#A875CE")
+
+five_set_boundaries_alc_sin_small_prior <- plot_alc_sin |>
+  group_by(set_number) |>
+  summarize(xmin = min(pt_number) - 0.5,
+            xmax = max(pt_number) + 0.5) |>
+  filter(set_number == 1 | set_number == 2 | set_number == 3 | set_number == 4 | set_number == 5)
+
+ggplot(data = plot_alc_sin, aes(x = pt_number, y = probability)) +
+  geom_rect(data = five_set_boundaries_alc_sin_small_prior, aes(x = NULL, y = NULL, xmin = xmin, xmax = xmax,
+                                                                ymin = -Inf, ymax = Inf, fill = set_number), alpha = 0.2) +
+  geom_line(data = plot_alc_sin, aes(y = win_prob_px)) +
+  labs(x = "Point Number",
+       y = "Probability of Winning Match",
+       title = "Alcaraz vs Sinner US Open Quarterfinal 2022",
+       subtitle = "Probability of Alcaraz Winning Match",
+       caption = "Prior contains 'lead-up' tournaments to the 2022 USO and 2022 USO itself") +
+  coord_cartesian(ylim = c(0, 1),
+                  xlim = c(0, nrow(plot_alc_sin))) +
+  scale_fill_manual(values = fills[1:5]) +
+  theme_bw(base_size = 14)
+```
+
+
+:::
+
+::: 
+
+Make sure to check out this general Guide <https://closeread.dev/guide/> referenced throughout for additional options, like highlighting text or table components and adjusting the layout of the document! :)
+
+
